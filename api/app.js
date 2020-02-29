@@ -2,14 +2,15 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-app.get('/', (req, res) => 
-    res.send('Hello World!')
-)
+app.get('/', function (req, res) {
+   res.send('Hello World');
+})
 
-app.get('/recipes/', (req, res) => 
+app.get('/recipes/', function (req, res) {
     
     res.statusCode = 200
-    res.json([{
+    res.json([
+        {
             'id': 'chocolate-chip-cookies-2',
             'name': 'Chocolate Chip Cookies',
             'tags': [{
@@ -19,16 +20,22 @@ app.get('/recipes/', (req, res) =>
             {
                 'id': 'dessert',
                 'name': 'Dessert'
-            }],
+            }]
+        },
+        {
             'id': 'jalapeno-mac-and-cheese',
             'name': 'Jalapeno-mac-and-cheese',
             'tags': [{
                 'id': 'cookie',
-                'id': 'dessert'
+                'name': 'Cookie'
+            },
+            {
+                'id': 'dessert',
+                'name': 'Dessert'
             }]
-        }]
-    })
+        }
+    ])
     return res
-)
+})
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
