@@ -8,8 +8,8 @@ app.get('/', function (req, res) {
 
 app.get('/recipes/', function (req, res) {
     
-    res.statusCode = 200
-    res.json([
+    res.statusCode(200).send(
+    [
         {
             'id': 'chocolate-chip-cookies-2',
             'name': 'Chocolate Chip Cookies',
@@ -35,7 +35,6 @@ app.get('/recipes/', function (req, res) {
             }]
         }
     ])
-    return res
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
