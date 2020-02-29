@@ -3,12 +3,12 @@ const app = express()
 const port = 3000
 
 app.get('/', (req, res) => 
-    res.send('Hello World!');
+    res.send('Hello World!')
 )
 
-app.get('/recipes/' function(req, res) {
+app.get('/recipes/', (req, res) => 
     
-    res.statusCode = 200;
+    res.statusCode = 200
     res.json([{
             'id': 'chocolate-chip-cookies-2',
             'name': 'Chocolate Chip Cookies',
@@ -27,8 +27,8 @@ app.get('/recipes/' function(req, res) {
                 'id': 'dessert'
             }]
         }]
-    });
-    return res;
-})
+    })
+    return res
+)
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
