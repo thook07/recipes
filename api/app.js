@@ -1,40 +1,74 @@
-const express = require('express')
-const app = express()
-const port = 3000
 
-app.get('/', function (req, res) {
-   res.send('Hello World');
-})
+// BASE SETUP
+// =============================================================================
 
-app.get('/recipes/', function (req, res) {
+// call the packages we need
+var express    = require('express');        // call express
+var app        = express();                 // define our app using express
+var bodyParser = require('body-parser');
+var firebase = require('./firebase.js');
+var log = require('./logger.js');
+
+
+// configure app to use bodyParser()
+// this will let us get the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var port = process.env.PORT || 3000;        // set our port
+
+// ROUTES FOR OUR API
+// =============================================================================
+var router = express.Router();              // get an instance of the express Router
+
+// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+router.get('/', function(req, res) {
+    res.json({ message: 'hooray! welcome to our api!' });   
+});
+
+// more routes for our API will happen here
+router.get('/recipes/', function (req, res) {
     
-    res.statusCode(200).send(
-    [
-        {
-            'id': 'chocolate-chip-cookies-2',
-            'name': 'Chocolate Chip Cookies',
-            'tags': [{
-                'id': 'cookie',
-                'name': 'Cookie'
-            },
-            {
-                'id': 'dessert',
-                'name': 'Dessert'
-            }]
-        },
-        {
-            'id': 'jalapeno-mac-and-cheese',
-            'name': 'Jalapeno-mac-and-cheese',
-            'tags': [{
-                'id': 'cookie',
-                'name': 'Cookie'
-            },
-            {
-                'id': 'dessert',
-                'name': 'Dessert'
-            }]
-        }
-    ])
+    var jsonArray = new Array();
+    
+    firebase.db.collection('recipes').get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+            jsonArray.push(doc.data());
+        });
+        res.status(200).json(jsonArray)
+    }).catch((err) => {
+        console.log('Error getting documents', err);
+    });
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+router.post('/recipes/:recipe_id', function (req, res) {
+    log.info("TESTING!!!");
+    res.send(req.params);
+    
+    
+    let docRef = firebase.db.collection('users').doc('alovelace');
+
+    let setAda = docRef.set({
+      first: 'Ada',
+      last: 'Lovelace',
+      born: 1815
+    });
+
+})
+
+
+
+// REGISTER OUR ROUTES -------------------------------
+// all of our routes will be prefixed with /api
+app.use('/api', router);
+
+// START THE SERVER
+// =============================================================================
+app.listen(port);
+log.info('Magic happens on port ' + port);
+
+
+
+
+
+
