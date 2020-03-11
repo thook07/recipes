@@ -220,7 +220,7 @@ app.post("/getRecipe", function (request, response){
             r.images,
             ri.amount, 
             ri.ingredientId,
-            ri.ingrdient,
+            ri.ingredient,
             i.category,
             t.id as tag
         FROM recipes r
