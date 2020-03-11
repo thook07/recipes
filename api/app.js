@@ -263,8 +263,12 @@ app.post("/getRecipes", function (request, response){
             for(var i=0; i<rows.length; i++){
                 currId = rows[i].id;
                 if(currId != prevId) {
+                    log.trace("Adding prev recipe ["+prevId+"] to the array!");
+                    data.ingredients = ingredients;
+                    recipes.push(data);
                     log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
                     data = {};
+                    var ingredients = [];
                     data.id = rows[0].id;
                     data.name = rows[0].name;
                     data.cookTime = rows[0].cookTime;
@@ -278,9 +282,20 @@ app.post("/getRecipes", function (request, response){
                     data.images = JSON.parse(rows[0].images);
                     data.tags = rows[0].tags.split(",");
                 }
+                var ing = {}
+                ing.amount = rows[i].amount;
+                ing.ingredientId = rows[i].ingredientId;
+                ing.ingredient = rows[i].ingredient;
+                ing.category = rows[i].category;
+                ingredients.push(ing);
                 
                 prevId = rows[i].id;
             }
+            log.trace("Done looping need to add the last recipe to the array");
+            data.ingredients = ingredients;
+            recipes.push(data);
+            log.debug("Recipes have been downloaded. There are ["+recipes.length+"] recipes in total")
+                    
             
             /*var data = {};
             data.id = rows[0].id;
