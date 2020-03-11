@@ -497,7 +497,7 @@ app.post("/getGroceryList", function (request, response){
                         author:rows[i].author
                     }
                 }
-                groceryItems.push(data);
+                groceryItems.push(item);
             }
             
             log.debug("Grocery Items have been downloaded. There are ["+groceryItems.length+"] items in total")
