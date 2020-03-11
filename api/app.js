@@ -296,38 +296,7 @@ app.post("/getRecipes", function (request, response){
             recipes.push(data);
             log.debug("Recipes have been downloaded. There are ["+recipes.length+"] recipes in total")
                     
-            
-            /*var data = {};
-            data.id = rows[0].id;
-            data.name = rows[0].name;
-            data.cookTime = rows[0].cookTime;
-            data.prepTime = rows[0].prepTime;
-            data.attribution = {
-                author: rows[0].author,
-                link: rows[0].link
-            }
-            data.notes = JSON.parse(rows[0].notes);
-            data.instructions = JSON.parse(rows[0].instructions);
-            data.images = JSON.parse(rows[0].images);
-            data.tags = rows[0].tags.split(",");
-            
-            
-            var ingredients = [];
-            var tags = [];
-            for (var i = 0; i < rows.length; i++) {
-                var ing = {}
-                ing.amount = rows[i].amount;
-                ing.ingredientId = rows[i].ingredientId;
-                ing.ingredient = rows[i].ingredient;
-                ing.category = rows[i].category;
-                ingredients.push(ing);
-                
-                
-            }
-            data.ingredients = ingredients;
-            newResponse["data"] = data;*/
-            
-            
+            newResponse["recipes"] = recipes;
             newResponse["success"] = "true"
             log.debug("Successfully got recipe!");
             response.send(newResponse)
