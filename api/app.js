@@ -23,6 +23,7 @@ var router = express.Router();
 // your express configuration here
 
 var httpServer = http.createServer(app);
+httpServer.listen(1338);
 
 /**** IF WE WANT TO GET FANCy WITH HTTPS
 var options = {
@@ -31,6 +32,7 @@ var options = {
     ca: fs.readFileSync('/etc/letsencrypt/live/'+apiURL+'/chain.pem')
 };
 var httpsServer = https.createServer(options, app);
+httpsServer.listen(1339);
 ****/
 
 /*********************************************
