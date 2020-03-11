@@ -250,7 +250,7 @@ app.post("/getRecipe", function (request, response){
             log.trace("No Rating Found for key: " + key);
             response.send(newResponse)
         } else {
-            log.trace("Parcing Rating SQL response.");
+            log.trace("Parcing Recipe SQL response.");
             
             var data = {};
             data.id = rows[0].id;
@@ -276,7 +276,7 @@ app.post("/getRecipe", function (request, response){
                 ingredients.push(ing);
                 
                 if(tags.indexOf(rows[i].tag) == -1) {
-                    tags.push(tag);
+                    tags.push(rows[i].tag);
                 }
             }
             newResponse["ingredients"] = ingredients;
@@ -285,7 +285,7 @@ app.post("/getRecipe", function (request, response){
             
             
             newResponse["success"] = "true"
-            log.debug("Successfully got rating data!");
+            log.debug("Successfully got recipe!");
             response.send(newResponse)
         }
     });
