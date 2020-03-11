@@ -33,6 +33,10 @@ class Ingredient{
         this.id
         this.category
     }
+    
+    toString(){
+        return "Ingredient: ["+this.id+"] ["+this.category+"]";
+    }
 }
 
 function ingredients() {
@@ -47,6 +51,7 @@ function ingredients() {
                 cat = "misc"
             }
             var ing = new Ingredient(id, cat);
+            console.log(ing.toString());
             ingredients.push(ing);
         });
         console.log("Ingredients: ["+ingredients.length+"]")
