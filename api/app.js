@@ -186,17 +186,82 @@ app.post("/ping", function(request, response) {
     })
 });
 
-app.use("/recipe", router)
-app.post("/recipe", function (request, response){
+app.use("/getRecipe", router)
+app.post("/getRecipe", function (request, response){
     
-    response.send({
-        "success": true,
-        "message": "Fetched Default Payment Info successfully.",
-        "recipe": {
-            name: "gravy",
-            id: "gravy",
-            cookTime: "30"
+    log.trace("Entering /getRecipe....");
+    
+    if( request.body == undefined ) {
+        log.error("/getRecipe No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+    var newResponse = {};
+    
+    var recipeId = request.body.recipeId
+    
+    log.trace("Getting Recipe: " + recipeId);
+     
+    var query = ""
+    query = `
+        SELECT 
+            r.name, 
+            ri.amount, 
+            ri.ingredientId, 
+            i.category
+        FROM recipes r
+        JOIN recipeIngredient ri on ri.recipeId = r.id
+        JOIN ingredients i on i.id = ri.ingredientId
+        WHERE r.id = ?
+    `
+    values = [
+        recipeId
+    ]
+    
+      
+    mysql.con.query(query, values, function(err,rows){
+        if(err) { 
+            log.error("/getRecipe Error Occurred getting Rating Data..");
+            newResponse["success"] = "false"
+            newResponse["msg"] = err
+            throw err;
+        }
+
+        log.trace("Found [" + rows.length + "] rows.")
+        if( rows.length <= 0) {
+            newResponse["success"] = "true"
+            newResponse["msg"] = "No Recipe with Id: " + recipeId
+            log.trace("No Rating Found for key: " + key);
+            response.send(newResponse)
+        } else {
+            log.trace("Parcing Rating SQL response.");
+            
+            var data = {};
+            data.id = rows[0].id;
+            data.name = rows[0].name;
+            data.cookTime = rows[0].cookTime;
+            data.prepTime = rows[0].prepTime;
+            
+            newResponse["data"] = data;
+            
+            /*for (var i = 0; i < rows.length; i++) {
+                newResponse["numberOfRatings"] = rows[i].numberOfRatings
+                newResponse["averageRating"] = rows[i].averageRating
+                newResponse["maxRating"] = rows[i].maxRating
+                newResponse["minRating"] = rows[i].minRating
+                log.trace(">>Avg Rating  : " + rows[i].averageRating);
+                log.trace(">># of Ratings: " + rows[i].numberOfRatings);
+                log.trace(">>and more...");
+            }*/
+            
+            newResponse["success"] = "true"
+            log.debug("Successfully got rating data!");
+            response.send(newResponse)
         }
     });
+    
 
 });
