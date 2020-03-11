@@ -19,9 +19,10 @@ function recipes() {
             var recipe = doc.data();
             recipes.push(recipe);
             //storeRecipe(recipe);
-            storeRecipeIngredients(recipe)
+            
         });
         console.log("Recipes: ["+recipes.length+"]")
+        storeRecipeIngredients(recipes)
         //storeTags(recipes);
         //storeRecipe2Tags(recipes);
         
