@@ -41,20 +41,31 @@ function storeRecipe(recipe) {
             notes
         )
         VALUES (
-            '`+recipe.id+`',
-            '`+recipe.name+`',
-            '`+recipe.attribution.author+`',
-            '`+recipe.attribution.link+`',
-            '`+recipe.cookTime+`',
-            '`+recipe.prepTime+`',
-            '`+JSON.stringify(recipe.images)+`',
-            '`+JSON.stringify(recipe.instructions)+`',
-            '`+JSON.stringify(recipe.notes)+`'
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?
         );
     `
+    var values = [
+        recipe.id,
+        recipe.name,
+        recipe.attribution.author,
+        recipe.attribution.link,
+        recipe.cookTime,
+        recipe.prepTime,
+        JSON.stringify(recipe.images),
+        JSON.stringify(recipe.instructions),
+        JSON.stringify(recipe.notes)
+    ]
     
     log.trace("query[" + query + "]");
-    mysql.con.query(query, function(err,rows){
+    mysql.con.query(query, values, function(err,rows){
         if(err) { 
             log.error("Error occurred while grabing order archive information.");
             log.error("Error Msg: " + err);
