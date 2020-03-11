@@ -465,7 +465,7 @@ app.post("/getGroceryList", function (request, response){
         JOIN ingredients i on i.id = ri.ingredientId
         WHERE r.id IN (`+whereClause+`);
     `
-     
+    log.trace("QUERY: " + query);
     mysql.con.query(query, recipeIds, function(err,rows){
         if(err) { 
             log.error("/getGroceryList Error Occurred getting data..");
@@ -492,7 +492,7 @@ app.post("/getGroceryList", function (request, response){
                 data.recipe = {
                     id: rows[i].id,
                     name: rows[i].name,
-                    images: rows[i].images,
+                    images: JSON.parse(rows[i].images),
                     attribution: {
                         author:rows[i].author
                     }
