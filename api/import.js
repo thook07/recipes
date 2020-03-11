@@ -41,15 +41,15 @@ function storeRecipe(recipe) {
             notes
         )
         VALUES (
-            `+recipe.id+`,
-            `+recipe.name+`,
-            `+recipe.attribution.author+`,
-            `+recipe.attribution.link+`,
-            `+recipe.cookTime+`,
-            `+recipe.prepTime+`,
-            `+JSON.stringify(recipe.images)+`,
-            `+JSON.stringify(recipe.instructions)+`,
-            `+JSON.stringify(recipe.notes)+`
+            '`+recipe.id+`',
+            '`+recipe.name+`',
+            '`+recipe.attribution.author+`',
+            '`+recipe.attribution.link+`',
+            '`+recipe.cookTime+`',
+            '`+recipe.prepTime+`',
+            '`+JSON.stringify(recipe.images)+`',
+            '`+JSON.stringify(recipe.instructions)+`',
+            '`+JSON.stringify(recipe.notes)+`'
         );
     `
     
