@@ -15,7 +15,7 @@ var log = require('./logger.js');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 3000;        // set our port
+var port = process.env.PORT || 4000;        // set our port
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -26,6 +26,8 @@ router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
 });
 
+
+/*
 // more routes for our API will happen here
 router.get('/recipes/', function (req, res) {
     
@@ -35,6 +37,7 @@ router.get('/recipes/', function (req, res) {
         snapshot.forEach((doc) => {
             jsonArray.push(doc.data());
         });
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.status(200).json(jsonArray)
     }).catch((err) => {
         console.log('Error getting documents', err);
@@ -55,7 +58,11 @@ router.post('/recipes/:recipe_id', function (req, res) {
     });
 
 })
+*/
 
+router.post('/recipe-signup/', function(req, res) {
+    console.log(req);
+});
 
 
 // REGISTER OUR ROUTES -------------------------------
