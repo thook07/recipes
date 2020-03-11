@@ -82,8 +82,8 @@ function storeTags(recipes) {
     console.log("Recipes: ["+recipes.length+"]")
     var tags = [];
     for(var i=0; i < recipes.length; i++){
-        console.log("Recipe: ["+recipe[i].name+"]");
-        for(tag in recipe[i].tags) {
+        console.log("Recipe: ["+recipes[i].name+"]");
+        for(tag in recipes[i].tags) {
             if(tags.indexOf(tag) !== -1) {
                 tags.push(tag);
             }
