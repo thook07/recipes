@@ -62,7 +62,7 @@ function storeRecipe(recipe) {
             newResponse["msg"] = err
             throw err;
         }
-    }
+    });
 }
 
 
