@@ -263,9 +263,13 @@ app.post("/getRecipes", function (request, response){
             for(var i=0; i<rows.length; i++){
                 currId = rows[i].id;
                 if(currId != prevId) {
-                    log.trace("Adding prev recipe ["+prevId+"] to the array!");
-                    data.ingredients = ingredients;
-                    recipes.push(data);
+                    if(Object.keys(data).length != 0) {
+                        log.trace("Adding prev recipe ["+prevId+"] to the array!");
+                        data.ingredients = ingredients;
+                        recipes.push(data);
+                    } else {
+                        log.trace("First time through. no need to add recipes");
+                    }
                     log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
                     data = {};
                     var ingredients = [];
