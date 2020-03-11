@@ -87,7 +87,7 @@ function storeTags(recipes) {
         for(var j=0; j < recipes[i].tags.length; j++) {
             var tag = recipes[i].tags[j]
             console.log("Tag ["+tag+"]");
-            if(tags.indexOf(tag) !== -1) {
+            if(tags.include(tag,0)) {
                 tags.push(tag);
             }
         }
