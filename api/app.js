@@ -42,7 +42,29 @@ app.listen(port);
 log.info('Magic happens on port ' + port);
 
 
+function main() {
+    
+    console.log("Getting Recipes");
+    firebase.db.collection("recipes").get().then(function(docs) {
+        docs.forEach(function(doc){
+            var data = doc.data();
+            console.log(data);
+            
+        });
+        
+        
+        
+    });
+            
+    
+    
+    
+    
+    
+    
+}
 
+main()
 
 
 
