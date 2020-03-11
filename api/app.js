@@ -192,6 +192,28 @@ app.post("/ping", function(request, response) {
     })
 });
 
+
+app.use("/getRecipes", router)
+app.post("/getRecipes", function (request, response){
+
+    newResponse["success"] = "true"
+    newResponse["data"] = [
+        {
+            name: "recipe1"
+        },
+        {
+            name: "recipe2"
+        },
+        {
+            name: "recipe3"
+        }
+    ]
+    log.debug("Successfully got recipe!");
+    response.send(newResponse)
+}
+
+
+
 app.use("/getRecipe", router)
 app.post("/getRecipe", function (request, response){
     
@@ -297,3 +319,5 @@ app.post("/getRecipe", function (request, response){
     
 
 });
+
+
