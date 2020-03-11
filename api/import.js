@@ -27,17 +27,7 @@ function recipes() {
     });
             
 }
-class Ingredient{
-    
-    constructor(id, category){
-        this.id
-        this.category
-    }
-    
-    toString(){
-        return "Ingredient: ["+this.id+"] ["+this.category+"]";
-    }
-}
+
 
 function ingredients() {
     
@@ -47,12 +37,13 @@ function ingredients() {
         docs.forEach(function(doc){
             var id = doc.data().id;
             var cat = doc.data().category;
-            console.log(id,cat, doc.data());
             if( cat == undefined) {
                 cat = "misc"
             }
-            var ing = new Ingredient(id, cat);
-            console.log(ing.toString());
+            var ing = {};
+            ing.id = id;
+            ing.cat = cat;
+            console.log(ing);
             ingredients.push(ing);
         });
         console.log("Ingredients: ["+ingredients.length+"]")
