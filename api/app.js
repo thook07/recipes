@@ -210,7 +210,7 @@ app.post("/getRecipes", function (request, response){
     ]
     log.debug("Successfully got recipe!");
     response.send(newResponse)
-}
+});
 
 
 
