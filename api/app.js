@@ -192,7 +192,7 @@ app.post("/ping", function(request, response) {
     })
 });
 
-
+/**** Get All Recipe ****/
 app.use("/getRecipes", router)
 app.post("/getRecipes", function (request, response){
     
@@ -308,8 +308,7 @@ app.post("/getRecipes", function (request, response){
     });
 });
 
-
-
+/**** Get Individual Recipe ****/
 app.use("/getRecipe", router)
 app.post("/getRecipe", function (request, response){
     
@@ -415,5 +414,129 @@ app.post("/getRecipe", function (request, response){
     
 
 });
+
+app.use("/getGroceryList", router)
+app.post("/getGroceryList", function (request, response){
+    
+    log.trace("Entering /getGroceryList....");
+    
+    if( request.body == undefined ) {
+        log.error("/getGroceryList No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+    var newResponse = {};
+    
+    var recipeIds = request.body.recipeIds
+    
+    log.trace("Building Grocery List off of: " + recipeIds.length);
+    
+    if(recipeIds.length <= 0) {
+        log.error("/getGroceryList RecipeIds weren't sent.");
+        response.send({
+            "success":"false",
+            "msg":"No IDs supplied"
+        })
+        return;
+    }
+    
+    var whereClause = "?"
+    for(var i=0; i<recipeIds.length; i++){
+        if(i != 0){
+            whereClause = whereClause + ",?" 
+        }
+    }
+     
+    var query = ""
+    query = `
+        SELECT 
+            r.id,
+            r.name,
+            r.attAuthor as author,
+            r.images,
+            ri.amount, 
+            ri.ingredientId,
+            i.category
+        FROM recipes r
+        JOIN recipeIngredients ri on ri.recipeId = r.id
+        JOIN ingredients i on i.id = ri.ingredientId
+        WHERE r.id IN (`+whereClause+`);
+    `
+     
+    mysql.con.query(query, recipeIds, function(err,rows){
+        if(err) { 
+            log.error("/getGroceryList Error Occurred getting data..");
+            newResponse["success"] = "false"
+            newResponse["msg"] = err
+            throw err;
+        }
+
+        log.trace("Found [" + rows.length + "] rows.")
+        if( rows.length <= 0) {
+            newResponse["success"] = "true"
+            newResponse["msg"] = "No Recipes with these IDs were found" + recipeIds
+            log.trace("No Recipes with these IDs were found" + recipeIds);
+            response.send(newResponse)
+        } else {
+            log.trace("Parcing Grocery List SQL response.");
+            var groceryItems = [];
+            var prevId = "";
+            var data = {};
+            for(var i=0; i<rows.length; i++){
+                currId = rows[i].id;
+                if(currId != prevId) {
+                    if(Object.keys(data).length != 0) {
+                        log.trace("Adding prev recipe ["+prevId+"] to the array!");
+                        data.ingredients = ingredients;
+                        groceryItems.push(data);
+                    } else {
+                        log.trace("First time through. no need to add recipes");
+                    }
+                    log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
+                    data = {};
+                    var ingredients = [];
+                    data.id = rows[i].id;
+                    data.name = rows[i].name;
+                    data.attribution = {
+                        author: rows[i].author
+                    }
+                    data.images = JSON.parse(rows[i].images);
+                }
+                var ing = {}
+                ing.amount = rows[i].amount;
+                ing.ingredientId = rows[i].ingredientId;
+                ing.category = rows[i].category;
+                ingredients.push(ing);
+                
+                prevId = rows[i].id;
+            }
+            log.trace("Done looping need to add the last recipe to the array");
+            data.ingredients = ingredients;
+            groceryItems.push(data);
+            log.debug("Grocery Items have been downloaded. There are ["+groceryItems.length+"] items in total")
+            
+            
+            newResponse["items"] = groceryItems;
+            newResponse["success"] = "true"
+            log.debug("Successfully got recipe!");
+            response.send(newResponse)
+        }
+    });
+    
+
+});
+
+
+
+
+
+
+
+
+
+
 
 
