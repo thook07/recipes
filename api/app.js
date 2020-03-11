@@ -209,7 +209,10 @@ app.post("/getRecipe", function (request, response){
     var query = ""
     query = `
         SELECT 
-            r.name, 
+            r.id as id,
+            r.name as name, 
+            r.cookTime as cookTime,
+            r.prepTime as prepTime,
             ri.amount, 
             ri.ingredientId, 
             i.category
