@@ -166,7 +166,7 @@ function storeIngredients(ingredients) {
 }
 
 function storeIngredient(ingredient) {
-    log.debug("ingredient [" + ingredient + "]");
+    log.debug("ingredient [" + ingredient.id + "]");
     var query = `
         INSERT INTO ingredients (
             id,
