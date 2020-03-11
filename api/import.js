@@ -79,12 +79,12 @@ function storeRecipe(recipe) {
 
 function storeTags(recipes) {
     
-    var tags = []
+    var tags = [];
     for(i=0;i<recipes.length;i++){
         var recipe = recipes[i]
         for(tag in recipe.tags) {
-            console.log(tag, tags.include(tag,0))
-            if(tags.include(tag,0) == false) {
+            console.log(tag, tags.include(tag))
+            if(tags.include(tag) == false) {
                 tags.push(tag);
             }
         }
