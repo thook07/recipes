@@ -248,7 +248,7 @@ app.post("/getRecipe", function (request, response){
         if( rows.length <= 0) {
             newResponse["success"] = "true"
             newResponse["msg"] = "No Recipe with Id: " + recipeId
-            log.trace("No Rating Found for key: " + key);
+            log.trace("No Recipe Found with Id: " + recipeId);
             response.send(newResponse)
         } else {
             log.trace("Parcing Recipe SQL response.");
