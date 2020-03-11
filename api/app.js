@@ -9,6 +9,7 @@ var firebase    = require("./firebase.js");
 var bodyParser  = require('body-parser');
 var log         = require('./logger.js');
 var mysql       = require('./mysql.js');
+var framework       = require('./framework.js');
 
 
 
@@ -195,22 +196,129 @@ app.post("/ping", function(request, response) {
 
 app.use("/getRecipes", router)
 app.post("/getRecipes", function (request, response){
-
-    var newResponse = {}
-    newResponse["success"] = "true"
-    newResponse["data"] = [
-        {
-            name: "recipe1"
-        },
-        {
-            name: "recipe2"
-        },
-        {
-            name: "recipe3"
-        }
+    
+    log.trace("Entering /getRecipe....");
+    
+    if( request.body == undefined ) {
+        log.error("/getRecipe No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+    var newResponse = {};
+    
+    var recipeId = request.body.recipeId
+    
+    log.trace("Getting All Recipes: " + recipeId);
+     
+    var query = ""
+    query = `
+        SELECT 
+            r.id,
+            r.name, 
+            r.cookTime,
+            r.prepTime,
+            r.attAuthor as author,
+            r.attLink as link,
+            r.notes,
+            r.instructions,
+            r.images,
+            ri.amount, 
+            ri.ingredientId,
+            ri.ingredient,
+            i.category,
+            GROUP_CONCAT(t.id) as tags
+        FROM recipes r
+        JOIN recipeIngredients ri on ri.recipeId = r.id
+        JOIN ingredients i on i.id = ri.ingredientId
+        JOIN recipe2tags rt on rt.recipeId = r.id
+        JOIN tags t on t.id = rt.tagId
+        GROUP BY ri.id;
+    `
+    values = [
     ]
-    log.debug("Successfully got recipe!");
-    response.send(newResponse)
+    
+      
+    mysql.con.query(query, values, function(err,rows){
+        if(err) { 
+            log.error("/getRecipes Error Occurred getting recipe data..");
+            newResponse["success"] = "false"
+            newResponse["msg"] = err
+            throw err;
+        }
+
+        log.trace("Found [" + rows.length + "] rows.")
+        if( rows.length <= 0) {
+            newResponse["success"] = "true"
+            newResponse["msg"] = "No Recipes found?! Somethings up."
+            log.trace("No Recipes found?! Somethings up.");
+            response.send(newResponse)
+        } else {
+            log.trace("Parcing Recipes SQL response.");
+            
+            var recipes = [];
+            var prevId = "";
+            var data = {};
+            for(var i=0; i<rows.length; i++){
+                currId = rows[i].id;
+                if(currId != prevId) {
+                    log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
+                    data = {};
+                    data.id = rows[0].id;
+                    data.name = rows[0].name;
+                    data.cookTime = rows[0].cookTime;
+                    data.prepTime = rows[0].prepTime;
+                    data.attribution = {
+                        author: rows[0].author,
+                        link: rows[0].link
+                    }
+                    data.notes = JSON.parse(rows[0].notes);
+                    data.instructions = JSON.parse(rows[0].instructions);
+                    data.images = JSON.parse(rows[0].images);
+                    data.tags = rows[0].tags.split(",");
+                }
+                
+                prevId = rows[i].id;
+            }
+            
+            /*var data = {};
+            data.id = rows[0].id;
+            data.name = rows[0].name;
+            data.cookTime = rows[0].cookTime;
+            data.prepTime = rows[0].prepTime;
+            data.attribution = {
+                author: rows[0].author,
+                link: rows[0].link
+            }
+            data.notes = JSON.parse(rows[0].notes);
+            data.instructions = JSON.parse(rows[0].instructions);
+            data.images = JSON.parse(rows[0].images);
+            data.tags = rows[0].tags.split(",");
+            
+            
+            var ingredients = [];
+            var tags = [];
+            for (var i = 0; i < rows.length; i++) {
+                var ing = {}
+                ing.amount = rows[i].amount;
+                ing.ingredientId = rows[i].ingredientId;
+                ing.ingredient = rows[i].ingredient;
+                ing.category = rows[i].category;
+                ingredients.push(ing);
+                
+                
+            }
+            data.ingredients = ingredients;
+            newResponse["data"] = data;*/
+            
+            
+            newResponse["success"] = "true"
+            log.debug("Successfully got recipe!");
+            response.send(newResponse)
+        }
+    });
 });
 
 
