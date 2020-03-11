@@ -260,7 +260,7 @@ function storeIngredients(ingredients) {
 }
 
 function storeIngredient(ingredient) {
-    log.debug("ingredient [" + ingredient.id + "]");
+    log.debug("ingredient [" + ingredient.id + "]["+ingredient.cat+"]");
     var query = `
         INSERT INTO ingredients (
             id,
@@ -273,7 +273,7 @@ function storeIngredient(ingredient) {
     `
     var values = [
         ingredient.id,
-        ingredient.category
+        ingredient.cat
     ]
     
     mysql.con.query(query, values, function(err,rows){
@@ -289,5 +289,5 @@ function storeIngredient(ingredient) {
 
 
 
-recipes()
-//ingredients()
+//recipes()
+ingredients()
