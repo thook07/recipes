@@ -121,7 +121,7 @@ function storeTag(tag){
             log.error("Error Msg: " + err);
             throw err;
         } else {
-            log.debug("Success. ["+recipe.name+"] was written to the datbase")
+            log.debug("Success. ["+tag+"] was written to the datbase")
         }
     });
     
