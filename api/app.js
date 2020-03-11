@@ -483,7 +483,9 @@ app.post("/getGroceryList", function (request, response){
         } else {
             log.trace("Parcing Grocery List SQL response.");
             var groceryItems = [];
+            var recipes = []; //slimmed down version of a recipe
             var prevId = "";
+            var recipe = {};
             for(var i=0; i<rows.length; i++){
                 var item = {};
                 item.ingredientId = rows[i].ingredientId;
@@ -498,11 +500,33 @@ app.post("/getGroceryList", function (request, response){
                     }
                 }
                 groceryItems.push(item);
+                
+                currId = rows[i].id;
+                if(currId != prevId) {
+                    if(Object.keys(recipe).length != 0) {
+                        log.trace("Adding prev recipe ["+prevId+"] to the array!");
+                        recipes.push(recipe);
+                    } else {
+                        log.trace("First time through. no need to add recipe");
+                    }
+                    log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
+                    recipe = {};
+                    recipe.id = rows[i].id;
+                    recipe.name = rows[i].name;
+                    recipe.attribution = {
+                        author: rows[i].author
+                    }
+                    recipe.images = JSON.parse(rows[i].images);
+                }
+                prevId = rows[i].id;
             }
-            
+            log.trace("Done looping need to add the last recipe to the array");
+            recipes.push(recipe);
+            log.debug("Recipes have been downloaded. There are ["+recipes.length+"] recipes in total")
             log.debug("Grocery Items have been downloaded. There are ["+groceryItems.length+"] items in total")
             
             
+            newResponse["recipes"] = recipes;
             newResponse["items"] = groceryItems;
             newResponse["success"] = "true"
             log.debug("Successfully got recipe!");
