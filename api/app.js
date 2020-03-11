@@ -35,6 +35,33 @@ var httpsServer = https.createServer(options, app);
 httpsServer.listen(1339);
 ****/
 
+router.use(function(req, res, next) {
+    //check header or url params or post params for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'] 
+    
+    if(token) {
+        log.trace("Token provided to authenticator. Checking for validity.");
+        jwt.verify(token, tokenConfig.secret, function(err, decoded) {
+            if(err) {
+                log.error("Failed to autenticate token!");
+                return res.send({success: false, message: 'Failed to authenticate token.'})
+            } else {
+                log.debug("Token decoded!");
+                req.decoded = decoded;
+                next();
+            }
+        });
+    } else {
+        log.error("No Token provided!")
+        return res.status(403).send({
+            success: false,
+            messge: 'No token provided.'
+        });
+    }
+    
+    
+});
+
 /*********************************************
  ************   Recipe APIs   ****************
 **********************************************/
@@ -149,7 +176,6 @@ function verifyCredentials(userId, password, onCompletion) {
     
 }
 
-
 //app.use("/ping", router)
 app.post("/ping", function(request, response) {
     log.info("Ping Successful. Hello There!");
@@ -159,3 +185,18 @@ app.post("/ping", function(request, response) {
         "msg": "Hello There!"
     })
 });
+
+app.use("/getPaymentInfo", router)
+app.post("/recipe", function (request, response){
+    
+    response.send({
+        "success": true,
+        "message": "Fetched Default Payment Info successfully.",
+        "recipe": {
+            name: "gravy",
+            id: "gravy",
+            cookTime: "30"
+        }
+    });
+
+}
