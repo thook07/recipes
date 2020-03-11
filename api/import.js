@@ -19,9 +19,8 @@ function main() {
             var recipe = doc.data();
             recipes.push(recipe);
             //storeRecipe(recipe);
-            storeTags(recipes);
         });
-        
+        storeTags(recipes);
         
         
     });
