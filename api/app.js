@@ -213,6 +213,9 @@ app.post("/getRecipe", function (request, response){
             r.name as name, 
             r.cookTime as cookTime,
             r.prepTime as prepTime,
+            r.attAuthor as author,
+            r.attLink as link,
+            r.notes
             ri.amount, 
             ri.ingredientId, 
             i.category
@@ -248,6 +251,7 @@ app.post("/getRecipe", function (request, response){
             data.name = rows[0].name;
             data.cookTime = rows[0].cookTime;
             data.prepTime = rows[0].prepTime;
+            data.notes = rows[0].notes;
             
             newResponse["data"] = data;
             
