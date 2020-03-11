@@ -275,6 +275,7 @@ app.post("/getRecipe", function (request, response){
                 ing.category = rows[i].category;
                 ingredients.push(ing);
                 
+                log.trace("Tag ["+rows[i].tag+"]");
                 if(tags.indexOf(rows[i].tag) == -1) {
                     tags.push(rows[i].tag);
                 }
