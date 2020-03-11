@@ -222,7 +222,7 @@ app.post("/getRecipe", function (request, response){
             ri.ingredientId,
             ri.ingredient,
             i.category,
-            GROUP_CONCAT(t.id) as tag
+            GROUP_CONCAT(t.id) as tags
         FROM recipes r
         JOIN recipeIngredients ri on ri.recipeId = r.id
         JOIN ingredients i on i.id = ri.ingredientId
