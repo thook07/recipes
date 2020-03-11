@@ -13,10 +13,13 @@ console.log("Starting Main!!!");
 function main() {
     
     console.log("Getting Recipes");
+    var recipes = [];
     firebase.db.collection("recipes").withConverter(recipeConverter).get().then(function(docs) {
         docs.forEach(function(doc){
             var recipe = doc.data();
-            storeRecipe(recipe);
+            recipes.push(recipe);
+            //storeRecipe(recipe);
+            storeTags(recipes);
         });
         
         
@@ -75,7 +78,19 @@ function storeRecipe(recipe) {
     });
 }
 
-
-
+function storeTags(recipes) {
+    
+    var tags = []
+    for(i=0;i<recipes.length;i++){
+        var recipe = recipes[i]
+        for(tag in tags) {
+            if(tags.include(tag,0) == false) {
+                tags.push(tag);
+            }
+        }
+    }
+    console.log(tags);
+    
+}
 
 main()
