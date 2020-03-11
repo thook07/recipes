@@ -47,6 +47,7 @@ function ingredients() {
         docs.forEach(function(doc){
             var id = doc.data().id;
             var cat = doc.data().category;
+            console.log(id,cat, doc.data());
             if( cat == undefined) {
                 cat = "misc"
             }
