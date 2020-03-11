@@ -127,7 +127,7 @@ function storeRecipeIngredients(recipes) {
 function storeRecipeIngredient(ingredient) {
     log.debug("recipe [" + ingredient.ingredientId + "]");
     var query = `
-        INSERT INTO recipes (
+        INSERT INTO recipeIngredient (
             amount,
             ingredient,
             recipeId,
@@ -154,7 +154,7 @@ function storeRecipeIngredient(ingredient) {
             log.error("Error Msg: " + err);
             throw err;
         } else {
-            log.debug("Success. ["+recipe.name+"] was written to the datbase")
+            log.debug("Success. ["+ingredient.ingredientId+"] was written to the datbase")
         }
     });
 }
