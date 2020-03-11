@@ -127,7 +127,7 @@ function storeRecipeIngredients(recipes) {
 function storeRecipeIngredient(ingredient) {
     log.debug("recipe [" + ingredient.ingredientId + "]");
     var query = `
-        INSERT INTO recipeIngredient (
+        INSERT INTO recipeIngredients (
             amount,
             ingredient,
             recipeId,
@@ -289,5 +289,5 @@ function storeIngredient(ingredient) {
 
 
 
-//recipes()
-ingredients()
+recipes()
+//ingredients()
