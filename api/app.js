@@ -196,6 +196,7 @@ app.post("/ping", function(request, response) {
 app.use("/getRecipes", router)
 app.post("/getRecipes", function (request, response){
 
+    var newResponse = {}
     newResponse["success"] = "true"
     newResponse["data"] = [
         {
