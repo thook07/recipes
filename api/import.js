@@ -21,8 +21,8 @@ function recipes() {
             //storeRecipe(recipe);
         });
         console.log("Recipes: ["+recipes.length+"]")
-        storeTags(recipes);
-        
+        //storeTags(recipes);
+        storeRecipe2Tags(recipes);
         
     });
             
@@ -104,6 +104,49 @@ function storeRecipe(recipe) {
     });
 }
 
+function storeRecipe2Tags(recipes){
+    console.log("Recipes: ["+recipes.length+"]")
+    var tags = [];
+    for(var i=0; i < recipes.length; i++){
+        console.log("Recipe: ["+recipes[i].name+"]");
+        console.log("Recipe Tags: ["+recipes[i].tags+"]");
+        for(var j=0; j < recipes[i].tags.length; j++) {
+            var tag = recipes[i].tags[j]
+            storeRecipe2Tag(recipes[i].id,tag);
+        }
+    }
+    console.log(tags);
+}
+
+function storeRecipe2Tag(recipeId, tag) {
+    log.debug("recipe ["+recipeId+"] tag [" + tag + "]");
+    var query = `
+        INSERT INTO recipe2tags (
+            recipeId,
+            tagId
+        )
+        VALUES (
+            ?,
+            ?
+        );
+    `
+    var values = [
+        recipeId,
+        tag
+    ]
+    
+    log.trace("query[" + query + "]");
+    mysql.con.query(query, values, function(err,rows){
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. ["+recipeId+"]-["+tag+"] was written to the datbase")
+        }
+    });
+}
+
 function storeTags(recipes) {
     console.log("Recipes: ["+recipes.length+"]")
     var tags = [];
@@ -158,8 +201,6 @@ function storeIngredients(ingredients) {
     for(var i=0; i < ingredients.length; i++){
         storeIngredient(ingredients[i])
     }
-    console.log(tags);
-    
 }
 
 function storeIngredient(ingredient) {
@@ -189,6 +230,8 @@ function storeIngredient(ingredient) {
         }
     });    
 }
+
+
 
 //recipes()
 ingredients()
