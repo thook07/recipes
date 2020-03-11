@@ -484,12 +484,12 @@ app.post("/getGroceryList", function (request, response){
             log.trace("Parcing Grocery List SQL response.");
             var groceryItems = [];
             var prevId = "";
-            var data = {};
             for(var i=0; i<rows.length; i++){
-                data.ingredientId = rows[i].ingredientId;
-                data.category = rows[i].category;
-                data.amount = rows[i].amount;
-                data.recipe = {
+                var item = {};
+                item.ingredientId = rows[i].ingredientId;
+                item.category = rows[i].category;
+                item.amount = rows[i].amount;
+                item.recipe = {
                     id: rows[i].id,
                     name: rows[i].name,
                     images: JSON.parse(rows[i].images),
