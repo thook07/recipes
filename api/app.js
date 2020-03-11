@@ -215,7 +215,7 @@ app.post("/getRecipe", function (request, response){
             r.prepTime as prepTime,
             r.attAuthor as author,
             r.attLink as link,
-            r.notes
+            r.notes,
             ri.amount, 
             ri.ingredientId, 
             i.category
