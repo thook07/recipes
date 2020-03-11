@@ -216,6 +216,7 @@ app.post("/getRecipe", function (request, response){
             r.attAuthor as author,
             r.attLink as link,
             r.notes,
+            r.instructions,
             ri.amount, 
             ri.ingredientId, 
             i.category
@@ -251,7 +252,12 @@ app.post("/getRecipe", function (request, response){
             data.name = rows[0].name;
             data.cookTime = rows[0].cookTime;
             data.prepTime = rows[0].prepTime;
-            data.notes = rows[0].notes;
+            data.attribution = {
+                author: rows[0].author,
+                link: rows[0].link
+            }
+            data.notes = JSON.parse(rows[0].notes);
+            data.instructions = JSON.parse(rows[0].instructions);
             
             newResponse["data"] = data;
             
