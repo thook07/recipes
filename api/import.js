@@ -13,7 +13,7 @@ console.log("Starting Main!!!");
 function main() {
     
     console.log("Getting Recipes");
-    firebase.db.collection("recipes").withConverter(recipeConverter).get().then(function(docs) {
+    firebase.db.collection("recipes").withConverter(recipeConverter).limit(1).get().then(function(docs) {
         docs.forEach(function(doc){
             var recipe = doc.data();
             storeRecipe(recipe);
@@ -36,8 +36,8 @@ function storeRecipe(recipe) {
             attLink,
             cookTime,
             prepTime,
-            images
-            instructions
+            images,
+            instructions,
             notes
         )
         VALUES (
