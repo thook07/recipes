@@ -105,7 +105,7 @@ function storeRecipe(recipe) {
     });
 }
 
-function storeRecipeIngredient(recipes) {
+function storeRecipeIngredients(recipes) {
     console.log("Recipes: ["+recipes.length+"]")
     var ingredients = {};
     for(var i=0; i < recipes.length; i++){
