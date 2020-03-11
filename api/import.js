@@ -13,11 +13,10 @@ console.log("Starting Main!!!");
 function main() {
     
     console.log("Getting Recipes");
-    firebase.db.collection("recipes").withConverter(recipeConverter).limit(1).get().then(function(docs) {
+    firebase.db.collection("recipes").withConverter(recipeConverter).get().then(function(docs) {
         docs.forEach(function(doc){
             var recipe = doc.data();
             storeRecipe(recipe);
-            return
         });
         
         
@@ -27,7 +26,7 @@ function main() {
 }
 
 function storeRecipe(recipe) {
-    
+    log.debug("recipe [" + recipe.name + "]");
     var query = `
         INSERT INTO recipes (
             id,
@@ -70,6 +69,8 @@ function storeRecipe(recipe) {
             log.error("Error occurred while grabing order archive information.");
             log.error("Error Msg: " + err);
             throw err;
+        } else {
+            log.debug("Success. ["+recipe.name+"] was written to the datbase")
         }
     });
 }
