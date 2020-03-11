@@ -19,10 +19,11 @@ function recipes() {
             var recipe = doc.data();
             recipes.push(recipe);
             //storeRecipe(recipe);
+            storeRecipeIngredients(recipe)
         });
         console.log("Recipes: ["+recipes.length+"]")
         //storeTags(recipes);
-        storeRecipe2Tags(recipes);
+        //storeRecipe2Tags(recipes);
         
     });
             
@@ -103,6 +104,60 @@ function storeRecipe(recipe) {
         }
     });
 }
+
+function storeRecipeIngredient(recipes) {
+    console.log("Recipes: ["+recipes.length+"]")
+    var ingredients = {};
+    for(var i=0; i < recipes.length; i++){
+        console.log("Recipe: ["+recipes[i].name+"]");
+        for(var j=0; j < recipes[i].ingredients.length; j++) {
+            var recipeIng = {};
+            recipeIng.amount = recipes[i].ingredients[j].amount
+            recipeIng.ingredient = recipes[i].ingredients[j].ingredient
+            recipeIng.ingredientId = recipes[i].ingredients[j].ingredientId
+            recipeIng.recipeId = recipes[i].ingredients[j].recipeId
+            
+            storeRecipeIngredient(recipeIng);
+        }
+    }
+    
+}
+
+function storeRecipeIngredient(ingredient) {
+    log.debug("recipe [" + ingredient.ingredientId + "]");
+    var query = `
+        INSERT INTO recipes (
+            amount,
+            ingredient,
+            recipeId,
+            ingredientId
+        )
+        VALUES (
+            ?,
+            ?,
+            ?,
+            ?
+        );
+    `
+    var values = [
+        ingredient.amount,
+        ingredient.ingredient,
+        ingredient.recipeId,
+        ingredient.ingredientId
+    ]
+    
+    log.trace("query[" + query + "]");
+    mysql.con.query(query, values, function(err,rows){
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. ["+recipe.name+"] was written to the datbase")
+        }
+    });
+}
+
 
 function storeRecipe2Tags(recipes){
     console.log("Recipes: ["+recipes.length+"]")
