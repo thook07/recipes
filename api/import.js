@@ -79,7 +79,7 @@ function storeRecipe(recipe) {
 }
 
 function storeTags(recipes) {
-
+    console.log("Recipes: ["+recipes.length+"]")
     var tags = [];
     for(recipe in recipes){
         console.log(recipe.tags)
