@@ -4,7 +4,7 @@ var log = require('./logger.js');
 con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "password",
+  password: "Pa$$w0rd",
   database: "recipes"
   /*dateStrings: 'date'*/
 });
