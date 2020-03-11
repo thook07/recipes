@@ -116,7 +116,7 @@ function storeRecipeIngredients(recipes) {
             recipeIng.amount = recipes[i].ingredients[j].amount
             recipeIng.ingredient = recipes[i].ingredients[j].ingredient
             recipeIng.ingredientId = recipes[i].ingredients[j].ingredientId
-            recipeIng.recipeId = recipes[i].ingredients[j].recipeId
+            recipeIng.recipeId = recipes[i].id
             
             storeRecipeIngredient(recipeIng);
         }
