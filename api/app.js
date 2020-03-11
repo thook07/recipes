@@ -7,7 +7,7 @@ var jwt         = require('jsonwebtoken');
 var tokenExpiration = 60*60*24; //used in authenticate 
 var firebase    = require("./firebase.js");
 var bodyParser  = require('body-parser');
-var log         = require('./RenderLogger.js');
+var log         = require('./logger.js');
 
 
 
