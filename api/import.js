@@ -17,6 +17,7 @@ function main() {
         docs.forEach(function(doc){
             var recipe = doc.data();
             storeRecipe(recipe);
+            return
         });
         
         
@@ -27,9 +28,41 @@ function main() {
 
 function storeRecipe(recipe) {
     
-    console.log("Name:",recipe.name,"ID",recipe.id,"Instr:",recipe.instructions);
-    
-    
+    var query = `
+        INSERT INTO recipes (
+            id,
+            name,
+            attAuthor,
+            attLink,
+            cookTime,
+            prepTime,
+            images
+            instructions
+            notes
+        )
+        VALUES (
+            `+recipe.id+`,
+            `+recipe.name+`,
+            `+recipe.attribution.author+`,
+            `+recipe.attribution.link+`,
+            `+recipe.cookTime+`,
+            `+recipe.prepTime+`,
+            `+JSON.stringify(recipe.images)+`,
+            `+JSON.stringify(recipe.instructions)+`,
+            `+JSON.stringify(recipe.notes)+`
+        );
+    `
+        
+    log.trace("Sending SQL Query to grab all the order information.");
+    mysql.con.query(query, function(err,rows){
+    if(err) { 
+        log.error("Error occurred while grabing order archive information.");
+        log.error("Error Msg: " + err);
+        newResponse["success"] = "false"
+        newResponse["msg"] = err
+        throw err;
+    }
+
     
 }
 
