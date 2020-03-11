@@ -10,7 +10,7 @@ var Recipe = require('./Recipe.js');
 
 console.log("Starting Main!!!");
 
-function main() {
+function recipes() {
     
     console.log("Getting Recipes");
     var recipes = [];
@@ -22,6 +22,35 @@ function main() {
         });
         console.log("Recipes: ["+recipes.length+"]")
         storeTags(recipes);
+        
+        
+    });
+            
+}
+class Ingredient{
+    
+    constructor(id, category){
+        this.id
+        this.category
+    }
+}
+
+function ingredients() {
+    
+    console.log("Getting Ingredients");
+    var ingredients = [];
+    firebase.db.collection("ingredients").get().then(function(docs) {
+        docs.forEach(function(doc){
+            var id = doc.data().id;
+            var cat = doc.data().category;
+            if( cat == undefined) {
+                cat = "misc"
+            }
+            var ing = new Ingredient(id, cat);
+            ingredients.push(ing);
+        });
+        console.log("Ingredients: ["+ingredients.length+"]")
+        storeIngredients(ingredients);
         
         
     });
@@ -127,22 +156,42 @@ function storeTag(tag){
     
 }
 
-function storeInstructions(recipes) {
-    console.log("Recipes: ["+recipes.length+"]")
-    var tags = [];
-    for(var i=0; i < recipes.length; i++){
-        console.log("Recipe: ["+recipes[i].name+"]");
-        console.log("Recipe Tags: ["+recipes[i].tags+"]");
-        for(var j=0; j < recipes[i].tags.length; j++) {
-            var tag = recipes[i].tags[j]
-            console.log("Tag ["+tag+"]");
-            if(tags.indexOf(tag) == -1) {
-                tags.push(tag);
-            }
-        }
+function storeIngredients(ingredients) {
+    console.log("Ingredients: ["+ingredients.length+"]")
+    for(var i=0; i < ingredients.length; i++){
+        storeIngredient(ingredients[i])
     }
     console.log(tags);
     
 }
 
-main()
+function storeIngredient(ingredient) {
+    log.debug("ingredient [" + ingredient + "]");
+    var query = `
+        INSERT INTO ingredient (
+            id,
+            category
+        )
+        VALUES (
+            ?,
+            ?
+        );
+    `
+    var values = [
+        ingredient.id,
+        ingredient.category
+    ]
+    
+    mysql.con.query(query, values, function(err,rows){
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. ["+ingredient.id+"] was written to the datbase")
+        }
+    });    
+}
+
+//recipes()
+ingredients()
