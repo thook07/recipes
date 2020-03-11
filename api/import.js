@@ -20,6 +20,7 @@ function main() {
             recipes.push(recipe);
             //storeRecipe(recipe);
         });
+        console.log("Recipes: ["+recipes.length+"]")
         storeTags(recipes);
         
         
@@ -83,7 +84,6 @@ function storeTags(recipes) {
     for(recipe in recipes){
         console.log(recipe.tags)
         for(tag in recipe.tags) {
-            console.log(tag, tags.indexOf(tag) !== -1)
             if(tags.indexOf(tag) !== -1) {
                 tags.push(tag);
             }
