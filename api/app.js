@@ -486,36 +486,20 @@ app.post("/getGroceryList", function (request, response){
             var prevId = "";
             var data = {};
             for(var i=0; i<rows.length; i++){
-                currId = rows[i].id;
-                if(currId != prevId) {
-                    if(Object.keys(data).length != 0) {
-                        log.trace("Adding prev recipe ["+prevId+"] to the array!");
-                        data.ingredients = ingredients;
-                        groceryItems.push(data);
-                    } else {
-                        log.trace("First time through. no need to add recipes");
+                data.ingredientId = rows[i].ingredientId;
+                data.category = rows[i].category;
+                data.amount = rows[i].amount;
+                data.recipe = {
+                    id: rows[i].id,
+                    name: rows[i].name,
+                    images: rows[i].images,
+                    attribution: {
+                        author:rows[i].author
                     }
-                    log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
-                    data = {};
-                    var ingredients = [];
-                    data.id = rows[i].id;
-                    data.name = rows[i].name;
-                    data.attribution = {
-                        author: rows[i].author
-                    }
-                    data.images = JSON.parse(rows[i].images);
                 }
-                var ing = {}
-                ing.amount = rows[i].amount;
-                ing.ingredientId = rows[i].ingredientId;
-                ing.category = rows[i].category;
-                ingredients.push(ing);
-                
-                prevId = rows[i].id;
+                groceryItems.push(data);
             }
-            log.trace("Done looping need to add the last recipe to the array");
-            data.ingredients = ingredients;
-            groceryItems.push(data);
+            
             log.debug("Grocery Items have been downloaded. There are ["+groceryItems.length+"] items in total")
             
             
