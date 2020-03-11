@@ -222,13 +222,14 @@ app.post("/getRecipe", function (request, response){
             ri.ingredientId,
             ri.ingredient,
             i.category,
-            t.id as tag
+            GROUP_CONCAT(t.id) as tag
         FROM recipes r
-        JOIN recipeIngredient ri on ri.recipeId = r.id
+        JOIN recipeIngredients ri on ri.recipeId = r.id
         JOIN ingredients i on i.id = ri.ingredientId
         JOIN recipe2tags rt on rt.recipeId = r.id
         JOIN tags t on t.id = rt.tagId
         WHERE r.id = ?
+        GROUP BY ri.id;
     `
     values = [
         recipeId
@@ -264,6 +265,8 @@ app.post("/getRecipe", function (request, response){
             data.notes = JSON.parse(rows[0].notes);
             data.instructions = JSON.parse(rows[0].instructions);
             data.images = JSON.parse(rows[0].images);
+            data.tags = rows[0].tags.split(",");
+            
             
             var ingredients = [];
             var tags = [];
@@ -275,13 +278,9 @@ app.post("/getRecipe", function (request, response){
                 ing.category = rows[i].category;
                 ingredients.push(ing);
                 
-                log.trace("Tag ["+rows[i].tag+"]");
-                if(tags.indexOf(rows[i].tag) == -1) {
-                    tags.push(rows[i].tag);
-                }
+                
             }
             newResponse["ingredients"] = ingredients;
-            newResponse["tags"] = tags;
             newResponse["data"] = data;
             
             
