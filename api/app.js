@@ -404,7 +404,7 @@ app.post("/getRecipe", function (request, response){
                 
             }
             data.ingredients = ingredients;
-            newResponse["data"] = data;
+            newResponse["recipe"] = data;
             
             
             newResponse["success"] = "true"
