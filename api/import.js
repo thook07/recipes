@@ -52,14 +52,12 @@ function storeRecipe(recipe) {
             `+JSON.stringify(recipe.notes)+`
         );
     `
-        
-    log.trace("Sending SQL Query to grab all the order information.");
+    
+    log.trace("query[" + query + "]");
     mysql.con.query(query, function(err,rows){
         if(err) { 
             log.error("Error occurred while grabing order archive information.");
             log.error("Error Msg: " + err);
-            newResponse["success"] = "false"
-            newResponse["msg"] = err
             throw err;
         }
     });
