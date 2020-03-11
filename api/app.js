@@ -209,20 +209,25 @@ app.post("/getRecipe", function (request, response){
     var query = ""
     query = `
         SELECT 
-            r.id as id,
-            r.name as name, 
-            r.cookTime as cookTime,
-            r.prepTime as prepTime,
+            r.id,
+            r.name, 
+            r.cookTime,
+            r.prepTime,
             r.attAuthor as author,
             r.attLink as link,
             r.notes,
             r.instructions,
+            r.images,
             ri.amount, 
-            ri.ingredientId, 
-            i.category
+            ri.ingredientId,
+            ri.ingrdient,
+            i.category,
+            t.id as tag
         FROM recipes r
         JOIN recipeIngredient ri on ri.recipeId = r.id
         JOIN ingredients i on i.id = ri.ingredientId
+        JOIN recipe2tags rt on rt.recipeId = r.id
+        JOIN tags t on t.id = rt.tagId
         WHERE r.id = ?
     `
     values = [
@@ -258,18 +263,26 @@ app.post("/getRecipe", function (request, response){
             }
             data.notes = JSON.parse(rows[0].notes);
             data.instructions = JSON.parse(rows[0].instructions);
+            data.images = JSON.parse(rows[0].images);
             
+            var ingredients = [];
+            var tags = [];
+            for (var i = 0; i < rows.length; i++) {
+                var ing = {}
+                ing.amount = rows[i].amount;
+                ing.ingredientId = rows[i].ingredientId;
+                ing.ingredient = rows[i].ingredient;
+                ing.category = rows[i].category;
+                ingredients.push(ing);
+                
+                if(tags.indexOf(rows[i].tag) == -1) {
+                    tags.push(tag);
+                }
+            }
+            newResponse["ingredients"] = ingredients;
+            newResponse["tags"] = tags;
             newResponse["data"] = data;
             
-            /*for (var i = 0; i < rows.length; i++) {
-                newResponse["numberOfRatings"] = rows[i].numberOfRatings
-                newResponse["averageRating"] = rows[i].averageRating
-                newResponse["maxRating"] = rows[i].maxRating
-                newResponse["minRating"] = rows[i].minRating
-                log.trace(">>Avg Rating  : " + rows[i].averageRating);
-                log.trace(">># of Ratings: " + rows[i].numberOfRatings);
-                log.trace(">>and more...");
-            }*/
             
             newResponse["success"] = "true"
             log.debug("Successfully got rating data!");
