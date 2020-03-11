@@ -186,7 +186,7 @@ app.post("/ping", function(request, response) {
     })
 });
 
-app.use("/getPaymentInfo", router)
+app.use("/recipe", router)
 app.post("/recipe", function (request, response){
     
     response.send({
