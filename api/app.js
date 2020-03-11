@@ -3,7 +3,7 @@ var https       = require('https');
 var fs          = require('fs');
 var dateFormat  = require('dateformat');
 var jwt         = require('jsonwebtoken');
-//var tokenConfig = require('./tokenConfig.js')
+var tokenConfig = require('./tokenConfig.js')
 var tokenExpiration = 60*60*24; //used in authenticate 
 var firebase    = require("./firebase.js");
 var bodyParser  = require('body-parser');
@@ -36,7 +36,7 @@ httpsServer.listen(1339);
 ****/
 
 /*********************************************
- ************  Render APIs  ***************
+ ************   Recipe APIs   ****************
 **********************************************/
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
