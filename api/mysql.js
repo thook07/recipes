@@ -11,7 +11,8 @@ con = mysql.createConnection({
 
 con.connect(function(err){
   if(err){
-    log.error('RENDER DB Error! Cannot Connect to Database.');
+    log.error('MySQL DB Error! Cannot Connect to Database.');
+    log.error(err);
     return;
   }
   log.info('DB Connection established');
