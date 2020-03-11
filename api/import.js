@@ -17,7 +17,6 @@ function main() {
     firebase.db.collection("recipes").withConverter(recipeConverter).get().then(function(docs) {
         docs.forEach(function(doc){
             var recipe = doc.data();
-            console.log(recipe.tags);
             recipes.push(recipe);
             //storeRecipe(recipe);
         });
@@ -81,8 +80,8 @@ function storeRecipe(recipe) {
 function storeTags(recipes) {
 
     var tags = [];
-    for(i=0;i<recipes.length;i++){
-        var recipe = recipes[i]
+    for(recipe in recipes){
+        console.log(recipe.tags)
         for(tag in recipe.tags) {
             console.log(tag, tags.indexOf(tag) !== -1)
             if(tags.indexOf(tag) !== -1) {
