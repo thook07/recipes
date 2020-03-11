@@ -273,18 +273,18 @@ app.post("/getRecipes", function (request, response){
                     log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
                     data = {};
                     var ingredients = [];
-                    data.id = rows[0].id;
-                    data.name = rows[0].name;
-                    data.cookTime = rows[0].cookTime;
-                    data.prepTime = rows[0].prepTime;
+                    data.id = rows[i].id;
+                    data.name = rows[i].name;
+                    data.cookTime = rows[i].cookTime;
+                    data.prepTime = rows[i].prepTime;
                     data.attribution = {
-                        author: rows[0].author,
-                        link: rows[0].link
+                        author: rows[i].author,
+                        link: rows[i].link
                     }
-                    data.notes = JSON.parse(rows[0].notes);
-                    data.instructions = JSON.parse(rows[0].instructions);
-                    data.images = JSON.parse(rows[0].images);
-                    data.tags = rows[0].tags.split(",");
+                    data.notes = JSON.parse(rows[i].notes);
+                    data.instructions = JSON.parse(rows[i].instructions);
+                    data.images = JSON.parse(rows[i].images);
+                    data.tags = rows[i].tags.split(",");
                 }
                 var ing = {}
                 ing.amount = rows[i].amount;
