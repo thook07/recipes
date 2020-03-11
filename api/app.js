@@ -23,7 +23,15 @@ var router = express.Router();
 // your express configuration here
 
 var httpServer = http.createServer(app);
+
+/**** IF WE WANT TO GET FANCy WITH HTTPS
+var options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/'+apiURL+'/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/'+apiURL+'/fullchain.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/'+apiURL+'/chain.pem')
+};
 var httpsServer = https.createServer(options, app);
+****/
 
 /*********************************************
  ************  Render APIs  ***************
