@@ -280,7 +280,7 @@ app.post("/getRecipe", function (request, response){
                 
                 
             }
-            newResponse["ingredients"] = ingredients;
+            data.ingredients = ingredients;
             newResponse["data"] = data;
             
             
