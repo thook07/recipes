@@ -168,7 +168,7 @@ function storeIngredients(ingredients) {
 function storeIngredient(ingredient) {
     log.debug("ingredient [" + ingredient + "]");
     var query = `
-        INSERT INTO ingredient (
+        INSERT INTO ingredients (
             id,
             category
         )
