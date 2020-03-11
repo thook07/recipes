@@ -233,5 +233,5 @@ function storeIngredient(ingredient) {
 
 
 
-//recipes()
-ingredients()
+recipes()
+//ingredients()
