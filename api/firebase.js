@@ -34,7 +34,7 @@ log.info("===================================");
 
 
 // admin setup cloud storage db
-let serviceAccount = require('./recipes-servacct.json');
+let serviceAccount = require('../recipes-service-account.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)

@@ -8,6 +8,7 @@ var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var firebase = require('./firebase.js');
 var log = require('./logger.js');
+var mysql = require('./mysql.js');
 
 
 // configure app to use bodyParser()
@@ -25,40 +26,6 @@ var router = express.Router();              // get an instance of the express Ro
 router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
 });
-
-
-/*
-// more routes for our API will happen here
-router.get('/recipes/', function (req, res) {
-    
-    var jsonArray = new Array();
-    
-    firebase.db.collection('recipes').get().then((snapshot) => {
-        snapshot.forEach((doc) => {
-            jsonArray.push(doc.data());
-        });
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(jsonArray)
-    }).catch((err) => {
-        console.log('Error getting documents', err);
-    });
-})
-
-router.post('/recipes/:recipe_id', function (req, res) {
-    log.info("TESTING!!!");
-    res.send(req.params);
-    
-    
-    let docRef = firebase.db.collection('users').doc('alovelace');
-
-    let setAda = docRef.set({
-      first: 'Ada',
-      last: 'Lovelace',
-      born: 1815
-    });
-
-})
-*/
 
 router.post('/recipe-signup/', function(req, res) {
     console.log(req);
