@@ -1,6 +1,5 @@
 class Ingredient {
-    
-    /*
+/*
     Categories:
         - dairy
         - produce
@@ -14,10 +13,7 @@ class Ingredient {
         - condiments
         - seeds-nuts-oils
         - misc
-
-
-
-    */
+*/
     constructor(data) {
         this.id = ('id' in data ? data.id : undefined);
         this.name = ('name' in data ? data.name : undefined);
@@ -34,27 +30,10 @@ class Ingredient {
         return map;
     }
     
-    toFirebase(){
-        var map = {}
-        map["id"] = this.id 
-        map["name"] = this.name 
-        map["category"] = this.category 
-        
-        
-        return map;
-    }
+    
     
     
 }
     
-ingredientConverter = {
-  toFirestore: function(ingredient) {
-      return ingredient.toFirebase()
-  },
-  fromFirestore: function(snapshot, options){
-      return new Ingredient(snapshot)
-  }
-}
-
 module.exports = Ingredient;
 
