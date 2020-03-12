@@ -290,7 +290,7 @@ app.post("/getRecipes", function (request, response){
                 if(currId != prevId) {
                     if(Object.keys(recipe).length != 0) {
                         log.trace("Adding prev recipe ["+prevId+"] to the array!");
-                        recipe.recipeIngredients = ingredients;
+                        recipe.recipeIngredients = recipeIngredient;
                         recipes.push(recipe);
                     } else {
                         log.trace("First time through. no need to add recipes");
