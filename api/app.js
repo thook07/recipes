@@ -10,6 +10,13 @@ var bodyParser  = require('body-parser');
 var log         = require('./logger.js');
 var mysql       = require('./mysql.js');
 
+//objects
+const Recipe            = require('./objects/Recipe.js');
+const RecipeIngredient  = require('./objects/RecipeIngredient.js');
+const RecipeGroup       = require('./objects/RecipeGroup.js');
+const Ingredient        = require('./objects/Ingredient.js');
+const Tag               = require('./objects/Tag.js');
+
 
 
 /*var options = {
@@ -183,7 +190,7 @@ function verifyCredentials(userId, password, onCompletion) {
 }
 
 //app.use("/ping", router)
-app.post("/ping", function(request, response) {
+app.get("/ping", function(request, response) {
     log.info("Ping Successful. Hello There!");
     
     response.send({
@@ -208,9 +215,28 @@ app.post("/getRecipes", function (request, response){
     }
     var newResponse = {};
     
-    var recipeId = request.body.recipeId
+    var recipeIds = request.body.recipeIds
+
+    var whereClause = ""
+    var values = [];
+    if(recipeIds != undefined) {
+        log.trace("Grabbing a subset of recipes!");
+
+        whereClause = "?"
+        for(var i=0; i<recipeIds.length; i++){
+            if(i != 0){
+                whereClause = whereClause + ",?" 
+            }
+        }
+        whereClause = "WHERE r.id IN (" + whereClause + ");";
+        values = recipeIds
+
+    } else {
+        log.trace("Grabbing all recipes.");
+        whereClause = ";";
+    }
     
-    log.trace("Getting All Recipes: " + recipeId);
+    log.trace("Where Clause: " + whereClause);
      
     var query = ""
     query = `
@@ -221,25 +247,25 @@ app.post("/getRecipes", function (request, response){
             r.prepTime,
             r.attAuthor as author,
             r.attLink as link,
-            r.notes,
             r.instructions,
+            r.notes,
             r.images,
             ri.amount, 
-            ri.ingredientId,
-            ri.ingredient,
+            ri.ingredient as ingredientDescription
+            i.id as ingredientId,
+            i.name as ingredientName,
             i.category,
-            GROUP_CONCAT(t.id) as tags
+            GROUP_CONCAT(t.id) as tagIds,
+            GROUP_CONCAT(t.name) as tagNames
         FROM recipes r
         JOIN recipeIngredients ri on ri.recipeId = r.id
         JOIN ingredients i on i.id = ri.ingredientId
         JOIN recipe2tags rt on rt.recipeId = r.id
         JOIN tags t on t.id = rt.tagId
-        GROUP BY ri.id;
+        GROUP BY ri.id
+        `+whereClause+`
     `
-    values = [
-    ]
     
-      
     mysql.con.query(query, values, function(err,rows){
         if(err) { 
             log.error("/getRecipes Error Occurred getting recipe data..");
@@ -256,48 +282,50 @@ app.post("/getRecipes", function (request, response){
             response.send(newResponse)
         } else {
             log.trace("Parcing Recipes SQL response.");
-            
             var recipes = [];
             var prevId = "";
-            var data = {};
+            var recipe = {};
             for(var i=0; i<rows.length; i++){
                 currId = rows[i].id;
                 if(currId != prevId) {
-                    if(Object.keys(data).length != 0) {
+                    if(Object.keys(recipe).length != 0) {
                         log.trace("Adding prev recipe ["+prevId+"] to the array!");
-                        data.ingredients = ingredients;
-                        recipes.push(data);
+                        recipe.recipeIngredients = ingredients;
+                        recipes.push(recipe);
                     } else {
                         log.trace("First time through. no need to add recipes");
                     }
                     log.trace("new recipe ["+currId+"] Setting initial recipe attributes");
-                    data = {};
-                    var ingredients = [];
-                    data.id = rows[i].id;
-                    data.name = rows[i].name;
-                    data.cookTime = rows[i].cookTime;
-                    data.prepTime = rows[i].prepTime;
-                    data.attribution = {
+                    recipe = {};
+                    var recipeIngredients = [];
+                    recipe.id = rows[i].id;
+                    recipe.name = rows[i].name;
+                    recipe.cookTime = rows[i].cookTime;
+                    recipe.prepTime = rows[i].prepTime;
+                    recipe.attribution = {
                         author: rows[i].author,
                         link: rows[i].link
                     }
-                    data.notes = JSON.parse(rows[i].notes);
-                    data.instructions = JSON.parse(rows[i].instructions);
-                    data.images = JSON.parse(rows[i].images);
-                    data.tags = rows[i].tags.split(",");
+                    recipe.notes = JSON.parse(rows[i].notes);
+                    recipe.instructions = JSON.parse(rows[i].instructions);
+                    recipe.images = JSON.parse(rows[i].images);
+                    recipe.tags = rows[i].tagIds.split(",");
                 }
-                var ing = {}
-                ing.amount = rows[i].amount;
-                ing.ingredientId = rows[i].ingredientId;
-                ing.ingredient = rows[i].ingredient;
-                ing.category = rows[i].category;
-                ingredients.push(ing);
+                var recipeIngredient = {};
+                recipeIngredient.amount = rows[i].amount;
+                recipeIngredient.ingredientDescription = rows[i].ingredientDescription;
+                var ingredient = {};
+                ingredient.id = rows[i].ingredientId;
+                ingredient.name = rows[i].ingredientName;
+                ingredient.category = rows[i].category;
+                recipeIngredient.ingredient = ingredient;
+                recipeIngredients.push(recipeIngredient);
                 
                 prevId = rows[i].id;
             }
             log.trace("Done looping need to add the last recipe to the array");
-            data.ingredients = ingredients;
-            recipes.push(data);
+            recipe.recipeIngredients = recipeIngredient;
+            recipes.push(recipe);
             log.debug("Recipes have been downloaded. There are ["+recipes.length+"] recipes in total")
                     
             newResponse["recipes"] = recipes;
@@ -415,6 +443,7 @@ app.post("/getRecipe", function (request, response){
 
 });
 
+/*** Probably should be deprecated. Need to use getRecipeGroup */
 app.use("/getGroceryList", router)
 app.post("/getGroceryList", function (request, response){
     
@@ -536,8 +565,6 @@ app.post("/getGroceryList", function (request, response){
     
 
 });
-
-
 
 
 
