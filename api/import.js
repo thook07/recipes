@@ -290,13 +290,10 @@ function createRecipe(recipeId){
     console.log("Getting Recipes");
     var recipes = [];
     firebase.db.collection("recipes").doc(recipeId).get().then(function(docs) {
-        docs.forEach(function(doc){
-            var recipe = doc.data();
-            storeRecipe(recipe);
-            
-        });
-        console.log("Recipes: ["+recipes.length+"]")
-        storeRecipeIngredients(recipes)
+        var recipe = doc.data();
+        storeRecipe(recipe);
+        console.log("Recipes: ["+recipe+"]")
+        storeRecipeIngredients([recipe])
         //storeTags(recipes);
         //storeRecipe2Tags(recipes);
         
