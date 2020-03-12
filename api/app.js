@@ -251,7 +251,7 @@ app.post("/getRecipes", function (request, response){
             r.notes,
             r.images,
             ri.amount, 
-            ri.ingredient as ingredientDescription
+            ri.ingredient as ingredientDescription,
             i.id as ingredientId,
             i.name as ingredientName,
             i.category,
