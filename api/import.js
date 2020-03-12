@@ -289,7 +289,7 @@ function storeIngredient(ingredient) {
 function createRecipe(recipeId){
     console.log("Getting Recipes");
     var recipes = [];
-    firebase.db.collection("recipes").doc(recipeId).get().then(function(docs) {
+    firebase.db.collection("recipes").doc(recipeId).get().then(function(doc) {
         var recipe = doc.data();
         storeRecipe(recipe);
         console.log("Recipes: ["+recipe+"]")
