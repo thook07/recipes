@@ -327,7 +327,7 @@ app.post("/getRecipes", function (request, response){
                 prevId = rows[i].id;
             }
             log.trace("Done looping need to add the last recipe to the array");
-            recipe.recipeIngredients = recipeIngredient;
+            recipe.recipeIngredients = recipeIngredients;
             recipes.push(recipe);
             log.debug("Recipes have been downloaded. There are ["+recipes.length+"] recipes in total")
                     
