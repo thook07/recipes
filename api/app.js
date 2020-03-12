@@ -332,7 +332,7 @@ app.post("/getRecipes", function (request, response){
             log.debug("Recipes have been downloaded. There are ["+recipes.length+"] recipes in total")
                     
             newResponse["count"] = recipes.length;
-            newResponse["recipes"] = recipes;
+            newResponse["recipeGroup"] = recipes;
             newResponse["success"] = "true"
             log.debug("Successfully got recipe!");
             response.send(newResponse)
