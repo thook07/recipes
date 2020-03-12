@@ -228,12 +228,15 @@ app.post("/getRecipes", function (request, response){
                 whereClause = whereClause + ",?" 
             }
         }
-        whereClause = "WHERE r.id IN (" + whereClause + ");";
+        whereClause = `
+            WHERE r.id IN (` + whereClause + `)
+            GROUP BY ri.id;`;
+
         values = recipeIds
 
     } else {
         log.trace("Grabbing all recipes.");
-        whereClause = ";";
+        whereClause = "GROUP BY ri.id;";
     }
     
     log.trace("Where Clause: " + whereClause);
@@ -262,7 +265,6 @@ app.post("/getRecipes", function (request, response){
         JOIN ingredients i on i.id = ri.ingredientId
         JOIN recipe2tags rt on rt.recipeId = r.id
         JOIN tags t on t.id = rt.tagId
-        GROUP BY ri.id
         `+whereClause+`
     `
     
