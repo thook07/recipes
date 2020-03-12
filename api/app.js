@@ -253,6 +253,7 @@ app.post("/getRecipes", function (request, response){
             r.instructions,
             r.notes,
             r.images,
+            ri.id as recipeIngredientId, 
             ri.amount, 
             ri.ingredient as ingredientDescription,
             i.id as ingredientId,
@@ -314,6 +315,7 @@ app.post("/getRecipes", function (request, response){
                     recipe.tags = rows[i].tagIds.split(",");
                 }
                 var recipeIngredient = {};
+                recipeIngredient.id = rows[i].recipeIngredientId
                 recipeIngredient.amount = rows[i].amount;
                 recipeIngredient.ingredientDescription = rows[i].ingredientDescription;
                 var ingredient = {};
@@ -321,7 +323,6 @@ app.post("/getRecipes", function (request, response){
                 ingredient.name = rows[i].ingredientName;
                 ingredient.category = rows[i].category;
                 recipeIngredient.ingredient = ingredient;
-                recipeIngredient.id = recipe.id + "-" + ingredient.id;
                 recipeIngredients.push(recipeIngredient);
                 
                 prevId = rows[i].id;
