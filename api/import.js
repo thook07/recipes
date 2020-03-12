@@ -6,7 +6,6 @@
 var firebase = require('./firebase.js');
 var log = require('./logger.js');
 var mysql = require('./mysql.js');
-var Recipe = require('./Recipe.js');
 
 console.log("Starting Main!!!");
 
