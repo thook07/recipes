@@ -319,6 +319,7 @@ app.post("/getRecipes", function (request, response){
                 ingredient.name = rows[i].ingredientName;
                 ingredient.category = rows[i].category;
                 recipeIngredient.ingredient = ingredient;
+                recipeIngredient.id = recipeId + "-" + ingredient.id;
                 recipeIngredients.push(recipeIngredient);
                 
                 prevId = rows[i].id;
