@@ -732,13 +732,13 @@ app.post("/createRecipe", function (request, response){
 function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients) {
 
     var values = []
-    for(var i=0; i<ris.length; i++) {
+    for(var i=0; i<recipeIngredients.length; i++) {
         values.push([
-            ris[i].ingredientDescription, 
+            recipeIngredients[i].ingredientDescription, 
             recipeId, 
             ingredientId, 
-            ris[i].amount, 
-            ris[i].isRecipe
+            recipeIngredients[i].amount, 
+            recipeIngredients[i].isRecipe
         ])
     }
 
