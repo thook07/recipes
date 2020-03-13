@@ -717,7 +717,9 @@ app.post("/createRecipe", function (request, response){
             log.debug("Success. ["+recipe.name+"] was written to the datbase")
 
             updateRecipeIngredients(recipe.id, null, recipe.recipeIngredients, function(riResponse) {
-                response.status(200).send(riResponse);
+                updateTags(recipeId, recipe.tags, function(tagResponse) {
+                    response.status(200).send(tagResponse);
+                });
             });
         }
     });
@@ -776,7 +778,38 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCo
 
 }
 
+function updateTags(recipeId, tags, onCompletion){
+    var values = []
+    for(var i=0; i<tags.length; i++) {
+        values.push([
+            tags[i], 
+            recipeId
+        ])
+    }
 
+    query = `
+    INSERT INTO recipe2tags (
+        tagId,
+        recipeId
+    ) VALUES (
+        ?
+    )
+`
+    mysql.con.query(query, values, function(err,rows){
+        if(err) { 
+            log.error("Error occurred saving tags");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. Tags were written to the datbase")
+            var newResponse = {
+                "success":true,
+            }
+            onCompletion(newResponse);
+        }
+
+    });
+}
 
 
 
