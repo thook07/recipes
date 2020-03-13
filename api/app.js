@@ -653,6 +653,22 @@ app.post("/getGroceryList", function (request, response){
 app.use("/createRecipe", router)
 app.post("/createRecipe", function (request, response){
 
+    log.trace("Entering /createRecipe....");
+    if( request.body == undefined ) {
+        log.error("/getRecipe No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+    var newResponse = {};
+    var recipe = request.body.recipe
+    
+    log.trace("Getting Recipe: " + recipe);
+    newResponse["recipe"] = recipe;
+    response.status(200).send(newResponse);
+
 
 });
 
