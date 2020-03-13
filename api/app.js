@@ -263,9 +263,9 @@ app.post("/getRecipes", function (request, response){
             GROUP_CONCAT(t.name) as tagNames
         FROM recipes r
         JOIN recipeIngredients ri on ri.recipeId = r.id
-        JOIN ingredients i on i.id = ri.ingredientId
-        JOIN recipe2tags rt on rt.recipeId = r.id
-        JOIN tags t on t.id = rt.tagId
+        LEFT JOIN ingredients i on i.id = ri.ingredientId
+        LEFT JOIN recipe2tags rt on rt.recipeId = r.id
+        LEFT JOIN tags t on t.id = rt.tagId
         `+whereClause+`
     `
     
