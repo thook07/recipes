@@ -805,7 +805,7 @@ function updateTags(recipeId, tags, onCompletion){
             log.error("Error Msg: " + err);
             throw err;
         } else {
-            log.debug("Success. ["+ rows.affectedRows+"] Tags were written to the datbase");
+            log.debug("Success. ["+ rows.affectedRows+"] Tags were written to the datbase..");
             var newResponse = {
                 "success":true,
             }
