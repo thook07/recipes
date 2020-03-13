@@ -35,3 +35,5 @@ class Recipe {
     
 }
 
+
+modules.exports = Recipe;
