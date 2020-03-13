@@ -391,7 +391,8 @@ function buildRecipes(recipeIds) {
             newResponse["recipeGroup"] = recipes;
             newResponse["success"] = "true"
             return newResponse;
-
+        }
+    });
 
 }
 
