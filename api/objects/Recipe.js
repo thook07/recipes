@@ -36,4 +36,4 @@ class Recipe {
 }
 
 
-modules.exports = Recipe;
+module.exports = Recipe;
