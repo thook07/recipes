@@ -257,7 +257,7 @@ app.post("/getRecipes", function (request, response){
             ri.amount, 
             ri.ingredient as ingredientDescription,
             ri.isRecipe,
-            ri.id as ingredientId,
+            ri.ingredientId,
             i.name as ingredientName,
             i.category,
             GROUP_CONCAT(t.id) as tagIds,
