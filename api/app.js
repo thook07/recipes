@@ -217,54 +217,62 @@ app.post("/getRecipes", function (request, response){
     
     var recipeIds = request.body.recipeIds
 
-    var rsp = buildRecipes(recipeIds);
+   buildRecipes(recipeIds, function(rsp) {
    
-    if(rsp.nestedRecipes.length > 0) {
-        log.debug("There is a recipe with a nested recipe. Will need to re-build the response.");
-        var recipeIds = [];
-        var recipesToUpdate = [];
-        for (var i=0; i<nestedRecipes.length; i++) {
-            recipeIds.push(nestedRecipes[i].ingredientId);
-            recipesToUpdate.push(nestedRecipes[i].recipeId);
-        }
-        var nestedRes = buildRecipes(recipeIds);
-        var nestedRecipes = nestedRes.recipeGroup;
-        var nestedRecipeMap = {};
-        for(var i=0; i<nestedRecipes.length; i++) {
-            var recipe = nestedRecipes[i];
-            nestedRecipeMap[recipe.id] = recipe;
+        if(rsp.success == false) {
+            logger.error("error occurred...");
+            return;
         }
 
-
-        var recipes = rsp.recipeGroup
-        for(var i=0; i<recipes.length; i++){
-            var recipe = recipes[i]
-            if( recipesToUpdate.includes(recipe.id) == false ) {
-                continue;
+        if(rsp.nestedRecipes.length > 0) {
+            log.debug("There is a recipe with a nested recipe. Will need to re-build the response.");
+            var recipeIds = [];
+            var recipesToUpdate = [];
+            for (var i=0; i<nestedRecipes.length; i++) {
+                recipeIds.push(nestedRecipes[i].ingredientId);
+                recipesToUpdate.push(nestedRecipes[i].recipeId);
             }
-            for(var j=0; j<recipe.recipeIngredients.length; j++) {
-                var ri = recipe.recipeIngredients[i];
-                if( recipeIds.includes(ri.ingredient.id) == false) {
-                    continue;
+            var nestedRes = buildRecipes(recipeIds, function(nestedRes){
+                var nestedRecipes = nestedRes.recipeGroup;
+                var nestedRecipeMap = {};
+                for(var i=0; i<nestedRecipes.length; i++) {
+                    var recipe = nestedRecipes[i];
+                    nestedRecipeMap[recipe.id] = recipe;
                 }
-                ri.recipe = nestedRecipeMap[ri.ingredient.id]; //need to verify that this gets changed.
-                ri.ingredient = null;
-            }
+
+
+                var recipes = rsp.recipeGroup
+                for(var i=0; i<recipes.length; i++){
+                    var recipe = recipes[i]
+                    if( recipesToUpdate.includes(recipe.id) == false ) {
+                        continue;
+                    }
+                    for(var j=0; j<recipe.recipeIngredients.length; j++) {
+                        var ri = recipe.recipeIngredients[i];
+                        if( recipeIds.includes(ri.ingredient.id) == false) {
+                            continue;
+                        }
+                        ri.recipe = nestedRecipeMap[ri.ingredient.id]; //need to verify that this gets changed.
+                        ri.ingredient = null;
+                    }
+                }
+
+                newResponse["count"] = recipes.length;
+                newResponse["recipeGroup"] = recipes;
+                newResponse["success"] = "true";
+            });
+
         }
 
-        newResponse["recipeGroup"] = recipes;
-        newResponse["success"] = "true";
-
-    }
-
-    log.debug("Successfully got recipe!");
-    response.send(newResponse)
+        log.debug("Successfully got recipe!");
+        response.send(newResponse)
+    });
    
 
 });
 
 //helper function
-function buildRecipes(recipeIds) {
+function buildRecipes(recipeIds, onCompletion) {
     var newResponse = {};
     var whereClause = ""
     var values = [];
@@ -334,7 +342,7 @@ function buildRecipes(recipeIds) {
             newResponse["success"] = "true"
             newResponse["msg"] = "No Recipes found?! Somethings up."
             log.trace("No Recipes found?! Somethings up.");
-            return newResponse;
+            onCompletion(newResponse);
         } else {
             log.trace("Parcing Recipes SQL response.");
             var recipes = [];
@@ -388,9 +396,10 @@ function buildRecipes(recipeIds) {
             log.debug("Recipes have been downloaded. There are ["+recipes.length+"] recipes in total")
 
             newResponse["nestedRecipes"] = nestedRecipes;
+            newResponse["count"] = recipes.length;
             newResponse["recipeGroup"] = recipes;
             newResponse["success"] = "true"
-            return newResponse;
+            onCompletion(newResponse);
         }
     });
 
