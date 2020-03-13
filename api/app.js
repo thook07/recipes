@@ -219,7 +219,6 @@ app.post("/getRecipes", function (request, response){
 
    buildRecipes(recipeIds, function(rsp) {
    
-        console.log(rsp.nestedRecipes)
         if(rsp.success == false) {
             logger.error("error occurred...");
             return;
@@ -229,11 +228,11 @@ app.post("/getRecipes", function (request, response){
             log.debug("There is a recipe with a nested recipe. Will need to re-build the response.");
             var recipeIds = [];
             var recipesToUpdate = [];
-            for (var i=0; i<nestedRecipes.length; i++) {
-                recipeIds.push(nestedRecipes[i].ingredientId);
-                recipesToUpdate.push(nestedRecipes[i].recipeId);
+            for (var i=0; i<rsp.nestedRecipes.length; i++) {
+                recipeIds.push(rsp.nestedRecipes[i].ingredientId);
+                recipesToUpdate.push(rsp.nestedRecipes[i].recipeId);
             }
-            var nestedRes = buildRecipes(recipeIds, function(nestedRes){
+            buildRecipes(recipeIds, function(nestedRes){
                 var nestedRecipes = nestedRes.recipeGroup;
                 var nestedRecipeMap = {};
                 for(var i=0; i<nestedRecipes.length; i++) {
