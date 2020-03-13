@@ -256,6 +256,7 @@ app.post("/getRecipes", function (request, response){
             ri.id as recipeIngredientId, 
             ri.amount, 
             ri.ingredient as ingredientDescription,
+            ri.isRecipe
             i.id as ingredientId,
             i.name as ingredientName,
             i.category,
@@ -319,6 +320,7 @@ app.post("/getRecipes", function (request, response){
                 recipeIngredient.id = rows[i].recipeIngredientId
                 recipeIngredient.amount = rows[i].amount;
                 recipeIngredient.ingredientDescription = rows[i].ingredientDescription;
+                recipeIngredient.isRecipe = rows[i].isRecipe;
                 var ingredient = {};
                 ingredient.id = rows[i].ingredientId;
                 ingredient.name = rows[i].ingredientName;
