@@ -753,6 +753,8 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients) {
         ?
     )
 `
+    console.log("values",values);
+    console.log("[values]",[values]);
 
     mysql.con.query(query, values, function(err,rows){
         if(err) { 
