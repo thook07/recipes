@@ -662,17 +662,115 @@ app.post("/createRecipe", function (request, response){
         })
         return;
     }
+
     var newResponse = {};
-    var recipe = request.body.recipe
+    var recipeData = request.body.recipe
     
-    log.trace("Getting Recipe: " + recipe);
-    newResponse["recipe"] = recipe;
-    response.status(200).send(newResponse);
+    log.trace("Getting Recipe: " + recipeData);
+    var recipe = new Recipe(recipeData);
+
+    var query = ""
+    query = `
+        INSERT INTO recipes (
+            id,
+            name,
+            attAuthor,
+            attLink,
+            cookTime,
+            prepTime,
+            images,
+            instructions,
+            notes
+        ) VALUES (
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?
+        )
+    `
+
+    var values = [
+        recipe.id,
+        recipe.name,
+        recipe.attribution.author,
+        recipe.attribution.link,
+        recipe.cookTime,
+        recipe.prepTime,
+        JSON.stringify(recipe.images),
+        JSON.stringify(recipe.instructions),
+        JSON.stringify(recipe.notes)
+    ]
+
+    mysql.con.query(query, values, function(err,rows){
+
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. ["+recipe.name+"] was written to the datbase")
+
+            updateRecipeIngredients(recipe.id, null, recipe.recipeIngredients)
+        }
+    });
+
+    //newResponse["recipe"] = recipe;
+
+
+
+    //response.status(200).send(newResponse);
 
 
 });
 
 
+function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients) {
+
+    var values = []
+    for(var i=0; i<ris.length; i++) {
+        values.push([
+            ris[i].ingredientDescription, 
+            recipeId, 
+            ingredientId, 
+            ris[i].amount, 
+            ris[i].isRecipe
+        ])
+    }
+
+    query = `
+    INSERT INTO recipeIngredients (
+        ingredient,
+        recipeId,
+        ingredientId,
+        amount,
+        isRecipe
+    ) VALUES (
+        ?
+    )
+`
+
+
+    mysql.con.query(query, [values], function(err,rows){
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. RecipeIngredient was written to the datbase")
+            var newResponse = {
+                "success":true,
+            }
+            onCompletion(newResponse);
+        }
+
+    });
+
+}
 
 
 
