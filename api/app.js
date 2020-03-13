@@ -244,9 +244,11 @@ app.post("/getRecipes", function (request, response){
                 var recipes = rsp.recipeGroup
                 for(var i=0; i<recipes.length; i++){
                     var recipe = recipes[i]
+                    log.trace("Seeing if ["+recipe.id+"] has to be updated.")
                     if( recipesToUpdate.includes(recipes[i].id) == false ) {
                         continue;
                     }
+                    log.trace("It does...["+recipe.id+"] Looping throught its recipeIngredients ["+recipe.recipeIngredients+"]")
                     for(var j=0; j<recipe.recipeIngredients.length; j++) {
                         var ri = recipe.recipeIngredients[j];
                         if( recipeIds.includes(ri.ingredient.id) == false) {
