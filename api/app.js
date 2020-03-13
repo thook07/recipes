@@ -321,7 +321,7 @@ function buildRecipes(recipeIds) {
     `
     
     log.trace(query);
-    mysql.con.query(query, values, function(err,rows){
+    await mysql.con.query(query, values, function(err,rows){
         if(err) { 
             log.error("/getRecipes Error Occurred getting recipe data..");
             newResponse["success"] = "false"
