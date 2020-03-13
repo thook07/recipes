@@ -224,8 +224,6 @@ app.post("/getRecipes", function (request, response){
             return;
         }
 
-        console.log('nested recipes',rsp.nestedRecipes);
-
         if(rsp.nestedRecipes == undefined) {
             rsp.nestedRecipes = [];
         }
@@ -773,9 +771,9 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCo
             log.error("Error Msg: " + err);
             throw err;
         } else {
-            log.debug("Success. RecipeIngredients were written to the datbase")
+            log.debug("Success. ["+ rows.affectedRows+"] RecipeIngredients were written to the datbase");
             var newResponse = {
-                "success":true,
+                "success":true
             }
             onCompletion(newResponse);
         }
@@ -807,7 +805,7 @@ function updateTags(recipeId, tags, onCompletion){
             log.error("Error Msg: " + err);
             throw err;
         } else {
-            log.debug("Success. Tags were written to the datbase")
+            log.debug("Success. ["+ rows.affectedRows+"] Tags were written to the datbase");
             var newResponse = {
                 "success":true,
             }
