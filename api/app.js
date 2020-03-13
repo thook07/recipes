@@ -232,8 +232,8 @@ app.post("/getRecipes", function (request, response){
                 recipeIds.push(rsp.nestedRecipes[i].ingredientId);
                 recipesToUpdate.push(rsp.nestedRecipes[i].recipeId);
             }
-            buildRecipes(recipeIds, function(nestedRes){
-                var nestedRecipes = nestedRes.recipeGroup;
+            buildRecipes(recipeIds, function(nestedRsp){
+                var nestedRecipes = nestedRsp.recipeGroup;
                 var nestedRecipeMap = {};
                 for(var i=0; i<nestedRecipes.length; i++) {
                     var recipe = nestedRecipes[i];
@@ -256,7 +256,7 @@ app.post("/getRecipes", function (request, response){
                         ri.ingredient = null;
                     }
                 }
-
+                console.log(nestedRsp,rsp)
                 newResponse["count"] = recipes.length;
                 newResponse["recipeGroup"] = recipes;
                 newResponse["success"] = "true";
@@ -328,7 +328,6 @@ function buildRecipes(recipeIds, onCompletion) {
         `+whereClause+`
     `
     
-    log.trace(query);
     mysql.con.query(query, values, function(err,rows){
         if(err) { 
             log.error("/getRecipes Error Occurred getting recipe data..");
