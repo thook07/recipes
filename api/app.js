@@ -269,6 +269,7 @@ app.post("/getRecipes", function (request, response){
         `+whereClause+`
     `
     
+    log.trace(query);
     mysql.con.query(query, values, function(err,rows){
         if(err) { 
             log.error("/getRecipes Error Occurred getting recipe data..");
@@ -572,6 +573,15 @@ app.post("/getGroceryList", function (request, response){
 });
 
 
+
+/******
+ *  Writing to database
+ */
+app.use("/createRecipe", router)
+app.post("/createRecipe", function (request, response){
+
+
+});
 
 
 
