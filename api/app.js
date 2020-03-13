@@ -765,7 +765,7 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCo
     console.log("values",values);
     console.log("[values]",[values]);
 
-    mysql.con.query(query, values, function(err,rows){
+    mysql.con.query(query, [values], function(err,rows){
         if(err) { 
             log.error("Error occurred saving recipe ingredients");
             log.error("Error Msg: " + err);
@@ -799,7 +799,7 @@ function updateTags(recipeId, tags, onCompletion){
         ?
     )
 `
-    mysql.con.query(query, values, function(err,rows){
+    mysql.con.query(query, [values], function(err,rows){
         if(err) { 
             log.error("Error occurred saving tags");
             log.error("Error Msg: " + err);
