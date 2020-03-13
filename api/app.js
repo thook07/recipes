@@ -754,10 +754,9 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients) {
     )
 `
 
-
-    mysql.con.query(query, [values], function(err,rows){
+    mysql.con.query(query, values, function(err,rows){
         if(err) { 
-            log.error("Error occurred while grabing order archive information.");
+            log.error("Error occurred saving recipe ingredients");
             log.error("Error Msg: " + err);
             throw err;
         } else {
