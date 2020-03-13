@@ -226,6 +226,10 @@ app.post("/getRecipes", function (request, response){
 
         console.log('nested recipes',rsp.nestedRecipes);
 
+        if(rsp.nestedRecipes == undefined) {
+            rsp.nestedRecipes = [];
+        }
+
         if(rsp.nestedRecipes.length > 0) {
             log.debug("There is a recipe with a nested recipe. Will need to re-build the response.");
             var recipeIds = [];
