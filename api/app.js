@@ -380,7 +380,7 @@ function buildRecipes(recipeIds, onCompletion) {
                     recipe.notes = JSON.parse(rows[i].notes);
                     recipe.instructions = JSON.parse(rows[i].instructions);
                     recipe.images = JSON.parse(rows[i].images);
-                    recipe.tags = rows[i].tagIds.split(",");
+                    if(rows[i].tagIds != undefined) recipe.tags = rows[i].tagIds.split(",");
                 }
                 var recipeIngredient = {};
                 recipeIngredient.id = rows[i].recipeIngredientId
@@ -494,7 +494,8 @@ app.post("/getRecipe", function (request, response){
             data.notes = JSON.parse(rows[0].notes);
             data.instructions = JSON.parse(rows[0].instructions);
             data.images = JSON.parse(rows[0].images);
-            data.tags = rows[0].tags.split(",");
+
+            if(rows[0].tags != undefined) data.tags = rows[0].tags.split(",");
             
             
             var ingredients = [];
