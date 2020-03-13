@@ -260,12 +260,16 @@ app.post("/getRecipes", function (request, response){
                 newResponse["count"] = recipes.length;
                 newResponse["recipeGroup"] = recipes;
                 newResponse["success"] = "true";
+                log.debug("Successfully got recipe!");
+                response.send(newResponse)
             });
 
+        } else {
+            log.debug("Successfully got recipe!");
+            response.send(newResponse)
         }
 
-        log.debug("Successfully got recipe!");
-        response.send(newResponse)
+
     });
    
 
