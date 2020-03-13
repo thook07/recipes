@@ -715,7 +715,9 @@ app.post("/createRecipe", function (request, response){
         } else {
             log.debug("Success. ["+recipe.name+"] was written to the datbase")
 
-            updateRecipeIngredients(recipe.id, null, recipe.recipeIngredients)
+            updateRecipeIngredients(recipe.id, null, recipe.recipeIngredients, function(riResponse) {
+                response.status(200).send(riResponse);
+            });
         }
     });
 
@@ -729,7 +731,7 @@ app.post("/createRecipe", function (request, response){
 });
 
 
-function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients) {
+function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCompletion) {
 
     var values = []
     for(var i=0; i<recipeIngredients.length; i++) {
@@ -762,7 +764,7 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients) {
             log.error("Error Msg: " + err);
             throw err;
         } else {
-            log.debug("Success. RecipeIngredient was written to the datbase")
+            log.debug("Success. RecipeIngredients were written to the datbase")
             var newResponse = {
                 "success":true,
             }
