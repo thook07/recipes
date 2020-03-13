@@ -262,6 +262,7 @@ app.post("/getRecipes", function (request, response){
                 console.log(nestedRsp,rsp)
                 newResponse["count"] = recipes.length;
                 newResponse["recipeGroup"] = recipes;
+                newResponse["nestedRecipes"] = nestedRsp.recipeGroup;
                 newResponse["success"] = "true";
                 log.debug("Successfully got recipe!");
                 response.send(newResponse)
