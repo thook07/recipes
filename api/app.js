@@ -219,6 +219,7 @@ app.post("/getRecipes", function (request, response){
 
    buildRecipes(recipeIds, function(rsp) {
    
+        console.log(rsp.nestedRecipes)
         if(rsp.success == false) {
             logger.error("error occurred...");
             return;
