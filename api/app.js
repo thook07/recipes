@@ -244,14 +244,15 @@ app.post("/getRecipes", function (request, response){
                 var recipes = rsp.recipeGroup
                 for(var i=0; i<recipes.length; i++){
                     var recipe = recipes[i]
-                    if( recipesToUpdate.includes(recipe.id) == false ) {
+                    if( recipesToUpdate.includes(recipes[i].id) == false ) {
                         continue;
                     }
                     for(var j=0; j<recipe.recipeIngredients.length; j++) {
-                        var ri = recipe.recipeIngredients[i];
+                        var ri = recipe.recipeIngredients[j];
                         if( recipeIds.includes(ri.ingredient.id) == false) {
                             continue;
                         }
+                        log.trace("Finally got to it. Adding recipe to ["+recipe.id+"]")
                         ri.recipe = nestedRecipeMap[ri.ingredient.id]; //need to verify that this gets changed.
                         ri.ingredient = null;
                     }
