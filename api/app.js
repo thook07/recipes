@@ -864,8 +864,7 @@ function updateTags(recipeId, tags, onCompletion){
 
 app.use("/updateRecipeIngredient", router);
 app.post("/updateRecipeIngredient", function (request, response) {
-    l
-    og.trace("Entering /updateRecipeIngredient....");
+    log.trace("Entering /updateRecipeIngredient....");
     if( request.body == undefined ) {
         log.error("/updateRecipeIngredient No Body Sent.");
         response.send({
