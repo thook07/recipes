@@ -720,7 +720,7 @@ app.post("/createRecipe", function (request, response){
         } else {
             log.debug("Success. ["+recipe.name+"] was written to the datbase")
 
-            updateRecipeIngredients(recipe.id, null, recipe.recipeIngredients, function(riResponse) {
+            updateRecipeIngredients(recipe.id, '', recipe.recipeIngredients, function(riResponse) {
                 updateTags(recipe.id, recipe.tags, function(tagResponse) {
                     response.status(200).send(tagResponse);
                 });
