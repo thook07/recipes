@@ -800,9 +800,7 @@ function updateTags(recipeId, tags, onCompletion){
     INSERT INTO recipe2tags (
         tagId,
         recipeId
-    ) VALUES (
-        ?
-    )
+    ) VALUES ?
 `
     mysql.con.query(query, [values], function(err,rows){
         if(err) { 
