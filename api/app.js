@@ -758,9 +758,7 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCo
         ingredientId,
         amount,
         isRecipe
-    ) VALUES (
-        ?
-    )
+    ) VALUES ?
 `
     var vals = [
         ['demian', 'demian@gmail.com', 1],
