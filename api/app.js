@@ -650,6 +650,59 @@ app.post("/getGroceryList", function (request, response){
 
 });
 
+/**** Get RecipeIngredient Issues ****/
+app.use("/getRecipeIngredientIssues", router)
+app.post("/getRegetRecipeIngredientIssuescipe", function (request, response){
+    
+    log.trace("Entering /getRecipeIngredientIssues....");
+    
+    var newResponse = {};
+    
+   log.trace("Grabbing Issues from recipeIngredients");
+     
+    var query = ""
+    query = `
+        select * from recipeIngredients where ingredientId = '' or ingredientId = NULL;
+    `
+   mysql.con.query(query, [], function(err,rows){
+        if(err) { 
+            log.error("/getRecipeIngredientIssues Error Occurred getting data..");
+            newResponse["success"] = "false"
+            newResponse["msg"] = err
+            throw err;
+        }
+
+        log.trace("Found [" + rows.length + "] rows.")
+        if( rows.length <= 0) {
+            newResponse["success"] = "true"
+            newResponse["msg"] = "No Issues!"
+            response.send(newResponse)
+        } else {
+
+            var recipeIngredients = [];
+            
+            for (var i = 0; i < rows.length; i++) {
+                var ri = {}
+                ri.id = rows[i].id;
+                ri.ingredientDescription = rows[i].amount;
+                ri.recipeId = rows[i].recipeId;
+                ri.ingredientId = rows[i].ingredientId;
+                ri.amount = rows[i].amount;
+                ri.isRecipe = rows[i].isRecipe;
+                recipeIngredients.push(ri);
+            }
+            newResponse["recipeIngredients"] = recipeIngredients;
+            
+            
+            newResponse["success"] = "true"
+            log.debug("Successfully got recipe!");
+            response.send(newResponse)
+        }
+    });
+    
+
+});
+
 
 
 /******
@@ -720,7 +773,7 @@ app.post("/createRecipe", function (request, response){
         } else {
             log.debug("Success. ["+recipe.name+"] was written to the datbase")
 
-            updateRecipeIngredients(recipe.id, '', recipe.recipeIngredients, function(riResponse) {
+            updateRecipeIngredients(recipe.id, null, recipe.recipeIngredients, function(riResponse) {
                 updateTags(recipe.id, recipe.tags, function(tagResponse) {
                     response.status(200).send(tagResponse);
                 });
@@ -760,16 +813,6 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCo
         isRecipe
     ) VALUES ?
 `
-    var vals = [
-        ['demian', 'demian@gmail.com', 1],
-        ['john', 'john@gmail.com', 2],
-        ['mark', 'mark@gmail.com', 3],
-        ['pete', 'pete@gmail.com', 4]
-    ];
-    console.log("vals", [vals]);
-    console.log("values",values);
-    console.log("[values]",[values]);
-
     mysql.con.query(query, [values], function(err,rows){
         if(err) { 
             log.error("Error occurred saving recipe ingredients");
