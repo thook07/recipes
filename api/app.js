@@ -762,6 +762,13 @@ function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCo
         ?
     )
 `
+    var vals = [
+        ['demian', 'demian@gmail.com', 1],
+        ['john', 'john@gmail.com', 2],
+        ['mark', 'mark@gmail.com', 3],
+        ['pete', 'pete@gmail.com', 4]
+    ];
+    console.log("vals", [vals]);
     console.log("values",values);
     console.log("[values]",[values]);
 
