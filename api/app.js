@@ -684,7 +684,7 @@ app.post("/getRecipeIngredientIssues", function (request, response){
             for (var i = 0; i < rows.length; i++) {
                 var ri = {}
                 ri.id = rows[i].id;
-                ri.ingredientDescription = rows[i].amount;
+                ri.ingredientDescription = rows[i].ingredient;
                 ri.recipeId = rows[i].recipeId;
                 ri.ingredientId = rows[i].ingredientId;
                 ri.amount = rows[i].amount;
