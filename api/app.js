@@ -670,7 +670,7 @@ app.post("/getRecipeIngredientIssues", function (request, response){
     query = `
         select * from recipeIngredients `+whereClause+`
     `
-   mysql.con.query(query, [], function(err,rows){
+    mysql.con.query(query, [], function(err,rows){
         if(err) { 
             log.error("/getRecipeIngredientIssues Error Occurred getting data..");
             newResponse["success"] = "false"
@@ -709,7 +709,56 @@ app.post("/getRecipeIngredientIssues", function (request, response){
 
 });
 
+app.use("/getRecipesTable", routers);
+app.get("/getRecipesTable", function (request, response){
+    log.trace("Entering /getRecipesTable....");
 
+    var newResponse = {};
+    
+   log.trace("Grabbing Issues from recipes");
+     
+    var query = ""
+    query = `
+        select * from recipes;
+    `
+    mysql.con.query(query, [], function(err,rows){
+        if(err) { 
+            log.error("/getRecipesTable Error Occurred getting data..");
+            newResponse["success"] = "false"
+            newResponse["msg"] = err
+            throw err;
+        }
+
+        log.trace("Found [" + rows.length + "] rows.")
+        if( rows.length <= 0) {
+            newResponse["success"] = "true"
+            newResponse["msg"] = "No Issues!"
+            response.send(newResponse)
+        } else {
+
+            var recipes = [];
+            
+            for (var i = 0; i < rows.length; i++) {
+                var recipe = {}
+                recipe.id = rows[i].id;
+                recipe.name = rows[i].name;
+                recipe.id = rows[i].cookTime;
+                recipe.id = rows[i].prepTime;
+                recipe.id = rows[i].attAuthor;
+                recipe.id = rows[i].attLink;
+                recipe.id = JSON.parse(rows[i].notes);
+                recipe.id = JSON.parse(rows[i].instructions);
+                recipe.id = JSON.parse(rows[i].images);
+                recipes.push(recipe);
+            }
+
+            newResponse["recipes"] = recipes;
+            newResponse["success"] = "true"
+            log.debug("Successfully got recipe!");
+            response.send(newResponse)
+        }
+    });
+});
 
 /******
  *  Writing to database
