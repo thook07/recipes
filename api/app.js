@@ -937,25 +937,25 @@ app.post("/updateRecipe", function (request, response) {
     var values = [];
     if('images' in request.body ) {
         var images = request.body.images
-        query = "UPDATE recipe SET images = ? WHERE id = ?";
+        query = "UPDATE recipes SET images = ? WHERE id = ?";
         values.push(JSON.stringify(images));
         values.push(id);
     }
     if('name' in request.body ) {
         var name = request.body.name
-        query = "UPDATE recipe SET name = ? WHERE id = ?";
+        query = "UPDATE recipes SET name = ? WHERE id = ?";
         values.push(name);
         values.push(id);
     }
     if('cookTime' in request.body ) {
         var cookTime = request.body.cookTime
-        query = "UPDATE recipe SET cookTime = ? WHERE id = ?";
+        query = "UPDATE recipes SET cookTime = ? WHERE id = ?";
         values.push(cookTime);
         values.push(id);
     }
     if('prepTime' in request.body ) {
         var prepTime = request.body.prepTime
-        query = "UPDATE recipe SET prepTime = ? WHERE id = ?";
+        query = "UPDATE recipes SET prepTime = ? WHERE id = ?";
         values.push(prepTime);
         values.push(id);
     }
