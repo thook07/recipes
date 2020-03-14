@@ -742,13 +742,13 @@ app.post("/getRecipesTable", function (request, response){
                 var recipe = {}
                 recipe.id = rows[i].id;
                 recipe.name = rows[i].name;
-                recipe.id = rows[i].cookTime;
-                recipe.id = rows[i].prepTime;
-                recipe.id = rows[i].attAuthor;
-                recipe.id = rows[i].attLink;
-                recipe.id = JSON.parse(rows[i].notes);
-                recipe.id = JSON.parse(rows[i].instructions);
-                recipe.id = JSON.parse(rows[i].images);
+                recipe.cookTime = rows[i].cookTime;
+                recipe.prepTime = rows[i].prepTime;
+                recipe.attAuthor = rows[i].attAuthor;
+                recipe.attLink = rows[i].attLink;
+                recipe.notes = JSON.parse(rows[i].notes);
+                recipe.instructions = JSON.parse(rows[i].instructions);
+                recipe.images = JSON.parse(rows[i].images);
                 recipes.push(recipe);
             }
 
