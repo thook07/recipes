@@ -652,7 +652,7 @@ app.post("/getGroceryList", function (request, response){
 
 /**** Get RecipeIngredient Issues ****/
 app.use("/getRecipeIngredientIssues", router)
-app.post("/getRegetRecipeIngredientIssuescipe", function (request, response){
+app.post("/getRecipeIngredientIssues", function (request, response){
     
     log.trace("Entering /getRecipeIngredientIssues....");
     
