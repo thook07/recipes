@@ -709,7 +709,7 @@ app.post("/getRecipeIngredientIssues", function (request, response){
 
 });
 
-app.use("/getRecipesTable", routers);
+app.use("/getRecipesTable", router);
 app.get("/getRecipesTable", function (request, response){
     log.trace("Entering /getRecipesTable....");
 
