@@ -862,5 +862,49 @@ function updateTags(recipeId, tags, onCompletion){
 }
 
 
+app.use("/updateRecipeIngredient", router);
+app.post("/updateRecipeIngredient", function (request, response) {
+    l
+    og.trace("Entering /updateRecipeIngredient....");
+    if( request.body == undefined ) {
+        log.error("/updateRecipeIngredient No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
 
+    var newResponse = {};
+    var id = request.body.id
+
+    var query = ""
+    var values = [];
+    if('isRecipe' in request.body ) {
+        var isRecipe = request.body.isRecipe
+        query = "UPDATE recipeIngredients SET isRecipe = ? WHERE id = ?";
+        values.push(isRecipe);
+        values.push(id);
+    }
+
+    if('ingredientId' in request.body ) {
+        var ingredientId = request.body.ingredientId
+        query = "UPDATE recipeIngredients SET ingredientId = ? WHERE id = ?";
+        values.push(ingredientId);
+        values.push(id);
+    }
+
+    mysql.con.query(query, values, function(err,rows){
+
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
+            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was updated"});
+        }
+    });
+
+});
 
