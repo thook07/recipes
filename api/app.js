@@ -916,6 +916,66 @@ function updateTags(recipeId, tags, onCompletion){
     });
 }
 
+app.use("/updateRecipe", router);
+app.post("/updateRecipe", function (request, response) {
+    log.trace("Entering /updateRecipe....");
+
+    if( request.body == undefined ) {
+        log.error("/updateRecipe No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+
+    var newResponse = {};
+    var id = request.body.id
+
+
+    var query = ""
+    var values = [];
+    if('images' in request.body ) {
+        var images = request.body.images
+        query = "UPDATE recipe SET images = ? WHERE id = ?";
+        values.push(JSON.stringify(images));
+        values.push(id);
+    }
+    if('name' in request.body ) {
+        var name = request.body.name
+        query = "UPDATE recipe SET name = ? WHERE id = ?";
+        values.push(name);
+        values.push(id);
+    }
+    if('cookTime' in request.body ) {
+        var cookTime = request.body.cookTime
+        query = "UPDATE recipe SET cookTime = ? WHERE id = ?";
+        values.push(cookTime);
+        values.push(id);
+    }
+    if('prepTime' in request.body ) {
+        var prepTime = request.body.prepTime
+        query = "UPDATE recipe SET prepTime = ? WHERE id = ?";
+        values.push(prepTime);
+        values.push(id);
+    }
+    
+
+    mysql.con.query(query, values, function(err,rows){
+
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
+            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was updated"});
+        }
+    });
+
+});
+
+
 
 app.use("/updateRecipeIngredient", router);
 app.post("/updateRecipeIngredient", function (request, response) {
