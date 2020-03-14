@@ -655,6 +655,11 @@ app.use("/getRecipeIngredientIssues", router)
 app.post("/getRecipeIngredientIssues", function (request, response){
     
     log.trace("Entering /getRecipeIngredientIssues....");
+
+    var whereClause = "where ingredientId = '' or ingredientId = NULL;"
+    if(request.body.filter = "all") {
+        whereClause =";"
+    }
     
     var newResponse = {};
     
@@ -662,7 +667,7 @@ app.post("/getRecipeIngredientIssues", function (request, response){
      
     var query = ""
     query = `
-        select * from recipeIngredients where ingredientId = '' or ingredientId = NULL;
+        select * from recipeIngredients `+whereClause+`
     `
    mysql.con.query(query, [], function(err,rows){
         if(err) { 
