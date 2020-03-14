@@ -657,6 +657,7 @@ app.post("/getRecipeIngredientIssues", function (request, response){
     log.trace("Entering /getRecipeIngredientIssues....");
 
     var whereClause = "where ingredientId = '' or ingredientId = NULL;"
+    console.log('request.body.filter',request.body.filter)
     if(request.body.filter = "all") {
         whereClause =";"
     }
