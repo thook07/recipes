@@ -391,7 +391,10 @@ function buildRecipes(recipeIds, onCompletion) {
                 recipeIngredient.amount = rows[i].amount;
                 recipeIngredient.ingredientDescription = rows[i].ingredientDescription;
                 recipeIngredient.isRecipe = rows[i].isRecipe;
-                if( rows[i].isRecipe == 1 ) nestedRecipes.push({ recipeId: recipe.id, ingredientId: rows[i].ingredientId });
+                if( rows[i].isRecipe == 1 ) {
+                    nestedRecipes.push({ recipeId: recipe.id, ingredientId: rows[i].ingredientId });
+                    recipeIngredient.parentRecipe = rows[i].id;
+                }
                 var ingredient = {};
                 ingredient.id = rows[i].ingredientId;
                 ingredient.name = rows[i].ingredientName;
