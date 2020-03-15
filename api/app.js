@@ -313,13 +313,13 @@ function buildRecipes(recipeIds, onCompletion) {
         }
         whereClause = `
             WHERE r.id IN (` + whereClause + `)
-            GROUP BY ri.id;`;
+            GROUP BY ri.id`;
 
         values = recipeIds
 
     } else {
         log.trace("Grabbing all recipes.");
-        whereClause = "GROUP BY ri.id;";
+        whereClause = "GROUP BY ri.id";
     }
     
     log.trace("Where Clause: " + whereClause);
@@ -352,7 +352,7 @@ function buildRecipes(recipeIds, onCompletion) {
         LEFT JOIN recipe2tags rt on rt.recipeId = r.id
         LEFT JOIN tags t on t.id = rt.tagId
         `+whereClause+`
-        ORDER BY r.name
+        ORDER BY r.name;
     `
     
     mysql.con.query(query, values, function(err,rows){
