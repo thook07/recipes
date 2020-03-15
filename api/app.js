@@ -352,6 +352,7 @@ function buildRecipes(recipeIds, onCompletion) {
         LEFT JOIN recipe2tags rt on rt.recipeId = r.id
         LEFT JOIN tags t on t.id = rt.tagId
         `+whereClause+`
+        ORDER BY r.name
     `
     
     mysql.con.query(query, values, function(err,rows){
