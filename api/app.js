@@ -218,6 +218,7 @@ app.post("/getRecipes", function (request, response){
     var recipeIds = request.body.recipeIds
 
    buildRecipes(recipeIds, function(rsp) {
+        console.log("first resp:",rsp);
    
         if(rsp.success == false) {
             logger.error("error occurred...");
