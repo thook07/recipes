@@ -265,6 +265,18 @@ app.post("/getRecipes", function (request, response){
                         ri.ingredient = null;
                     }
                 }
+
+                var map = {};
+                for(var i=0; i<rsp.nestedRecipes.length; i++){
+                    var parent = rsp.nestedRecipes[i].recipeId
+                    var child = rsp.nestedRecipes[i].ingredientId
+                    map[child] = parent;
+                }
+
+                for(var i=0; i<nestedRsp.recipeGroup.length; i++) {
+                    nestedRsp.recipeGroup[i].parentRecipe = map[nestedRsp.recipeGroup[i].id];
+                }
+
                 console.log(nestedRsp,rsp)
                 newResponse["count"] = recipes.length;
                 newResponse["recipeGroup"] = recipes;
@@ -275,7 +287,7 @@ app.post("/getRecipes", function (request, response){
             });
 
         } else {
-            log.debug("Successfully got recipe!");
+            log.debug("Successfully got recipes!");
             response.send(rsp)
         }
 
