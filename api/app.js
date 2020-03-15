@@ -237,7 +237,7 @@ app.post("/getRecipes", function (request, response){
                 recipesToUpdate.push(rsp.nestedRecipes[i].recipeId);
             }
             buildRecipes(recipeIds, function(nestedRsp){
-                console.log("nested:",nestedResponse);
+                console.log("nested:",nestedRsp);
                 var nestedRecipes = nestedRsp.recipeGroup;
                 var nestedRecipeMap = {};
                 for(var i=0; i<nestedRecipes.length; i++) {
