@@ -990,8 +990,6 @@ app.post("/updateRecipe", function (request, response) {
 
 });
 
-
-
 app.use("/updateRecipeIngredient", router);
 app.post("/updateRecipeIngredient", function (request, response) {
     log.trace("Entering /updateRecipeIngredient....");
@@ -1009,17 +1007,39 @@ app.post("/updateRecipeIngredient", function (request, response) {
 
     var query = ""
     var values = [];
-    if('isRecipe' in request.body ) {
-        var isRecipe = request.body.isRecipe
-        query = "UPDATE recipeIngredients SET isRecipe = ? WHERE id = ?";
-        values.push(isRecipe);
+
+    if('ingredient' in request.body ) {
+        var value = request.body.ingredient
+        query = "UPDATE recipeIngredients SET ingredient = ? WHERE id = ?";
+        values.push(value);
         values.push(id);
     }
 
     if('ingredientId' in request.body ) {
-        var ingredientId = request.body.ingredientId
+        var value = request.body.ingredientId
         query = "UPDATE recipeIngredients SET ingredientId = ? WHERE id = ?";
-        values.push(ingredientId);
+        values.push(value);
+        values.push(id);
+    }
+
+    if('recipeId' in request.body ) {
+        var value = request.body.recipeId
+        query = "UPDATE recipeIngredients SET recipeId = ? WHERE id = ?";
+        values.push(value);
+        values.push(id);
+    }
+
+    if('amount' in request.body ) {
+        var value = request.body.amount
+        query = "UPDATE recipeIngredients SET amount = ? WHERE id = ?";
+        values.push(value);
+        values.push(id);
+    }
+
+    if('isRecipe' in request.body ) {
+        var value = request.body.isRecipe
+        query = "UPDATE recipeIngredients SET isRecipe = ? WHERE id = ?";
+        values.push(value);
         values.push(id);
     }
 
