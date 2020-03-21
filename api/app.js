@@ -1113,7 +1113,7 @@ app.post("/createRecipeIngredient", function (request, response) {
     var isRecipe = request.body.isRecipe;
 
     var query = `
-    INSERT INTO 
+    INSERT INTO recipeIngredients
         (amount, ingredient, recipeId, ingredientId, isRecipe) 
     VALUES
         (?,?,?,?,?)
