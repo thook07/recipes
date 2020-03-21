@@ -1081,8 +1081,14 @@ app.post("/deleteRecipeIngredient", function (request, response) {
             log.error("Error Msg: " + err);
             throw err;
         } else {
-            log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
-            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was deleted! " + rows.affectedRows +" rows were updated!"});
+
+            if(rows.affectedRows > 0) {
+                log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
+                response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was deleted! " + rows.affectedRows +" rows were updated!"});
+            } else {
+                log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
+                response.status(200).send({ success: true, message: "Error. No recipe with ["+id+"] was found. " + rows.affectedRows +" rows were updated!"});
+            }
         }
     });
 
