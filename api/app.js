@@ -1086,8 +1086,60 @@ app.post("/deleteRecipeIngredient", function (request, response) {
                 log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
                 response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was deleted! " + rows.affectedRows +" rows were updated!"});
             } else {
-                log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
+                log.debug("Error. No recipe with ["+id+"] was found. " + rows.affectedRows +" rows were updated!")
                 response.status(200).send({ success: true, message: "Error. No recipe with ["+id+"] was found. " + rows.affectedRows +" rows were updated!"});
+            }
+        }
+    });
+
+});
+
+app.use("/createRecipeIngredient", router);
+app.post("/createRecipeIngredient", function (request, response) {
+    log.trace("Entering /createRecipeIngredient....");
+    if( request.body == undefined ) {
+        log.error("/createRecipeIngredient No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+
+    var amount = request.body.amount;
+    var ingredient = request.body.ingredient;
+    var recipeId = request.body.recipeId;
+    var ingredientId = request.body.ingredientId;
+    var isRecipe = request.body.isRecipe;
+
+    var query = `
+    INSERT INTO 
+        (amount, ingredient, recipeId, ingredientId, isRecipe) 
+    VALUES
+        (?,?,?,?,?)
+    `
+    var values = [
+        amount,
+        ingredient,
+        recipeId,
+        ingredientId,
+        isRecipe
+    ];
+
+    mysql.con.query(query, values, function(err,rows){
+
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+
+            if(rows.affectedRows > 0) {
+                log.debug("Success. Recipe Ingredient Created!")
+                response.status(200).send({ success: true, message: "Success. Recipe Ingredient Created"});
+            } else {
+                log.debug("Error: No rows were updated.")
+                response.status(200).send({ success: false, message: "Error. No Rows were updated."});
             }
         }
     });
