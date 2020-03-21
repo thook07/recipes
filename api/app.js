@@ -1082,7 +1082,7 @@ app.post("/deleteRecipeIngredient", function (request, response) {
             throw err;
         } else {
             log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
-            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was deleted!"});
+            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was deleted! " + rows.affectedRows +" rows were updated!"});
         }
     });
 
