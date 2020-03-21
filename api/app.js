@@ -1057,3 +1057,35 @@ app.post("/updateRecipeIngredient", function (request, response) {
 
 });
 
+app.use("/deleteRecipeIngredient", router);
+app.post("/deleteRecipeIngredient", function (request, response) {
+    log.trace("Entering /deleteRecipeIngredient....");
+    if( request.body == undefined ) {
+        log.error("/RecipeIngredient No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+
+    var id = request.body.id
+
+    var query = "DELETE FROM recipeIngredients WHERE id = ?"
+    var values = [id];
+
+    mysql.con.query(query, values, function(err,rows){
+
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. Recipe Ingredient with id of ["+id+"] was updated")
+            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was deleted!"});
+        }
+    });
+
+});
+
+
