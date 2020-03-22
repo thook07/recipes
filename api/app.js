@@ -1270,6 +1270,8 @@ app.post("/createTag", function (request, response) {
     var name = request.body.ingredient;
     var category = request.body.recipeId;
 
+    console.log(request.body);
+
     var query = `
     INSERT INTO tags
         (id, name, category) 
