@@ -775,6 +775,50 @@ app.post("/getRecipesTable", function (request, response){
     });
 });
 
+app.use("/getTagTable", router);
+app.post("/getTagTable", function(request, response){
+    log.trace("Entering /getTagTable....");
+
+    var newResponse = {};
+      
+    var query = ""
+    query = `
+        select * from tags;
+    `
+    mysql.con.query(query, [], function(err,rows){
+        if(err) { 
+            log.error("/getTagTable Error Occurred getting data..");
+            newResponse["success"] = "false"
+            newResponse["msg"] = err
+            throw err;
+        }
+
+        log.trace("Found [" + rows.length + "] rows.")
+        if( rows.length <= 0) {
+            newResponse["success"] = "true"
+            newResponse["msg"] = "No Issues!"
+            response.send(newResponse)
+        } else {
+
+            var tags = [];
+            
+            for (var i = 0; i < rows.length; i++) {
+                var tag = {}
+                tag.id = rows[i].id;
+                tag.name = rows[i].name;
+                tags.push(tag);
+            }
+
+            newResponse["tags"] = tags;
+            newResponse["success"] = "true"
+            log.debug("Successfully got tags!");
+            response.send(newResponse)
+        }
+    });
+
+
+});
+
 /******
  *  Writing to database
  */
