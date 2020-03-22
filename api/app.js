@@ -1253,3 +1253,51 @@ app.post("/updateRecipeTags", function (request, response) {
     });
 
 });
+
+app.use("/createTag", router);
+app.post("/createTag", function (request, response) {
+    log.trace("Entering /createTag....");
+    if( request.body == undefined ) {
+        log.error("/createTag No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
+
+    var id = request.body.amount;
+    var name = request.body.ingredient;
+    var category = request.body.recipeId;
+
+    var query = `
+    INSERT INTO tag
+        (id, name, category) 
+    VALUES
+        (?,?,?)
+    `
+    var values = [
+        id,
+        name,
+        category
+    ];
+
+    mysql.con.query(query, values, function(err,rows){
+
+        if(err) { 
+            log.error("Error occurred while inserting tag.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+
+            if(rows.affectedRows > 0) {
+                log.debug("Success. Tag Created!")
+                response.status(200).send({ success: true, message: "Success. Tag Created"});
+            } else {
+                log.debug("Error creating Tag: No rows were updated.")
+                response.status(200).send({ success: false, message: "Error. No Rows were updated."});
+            }
+        }
+    });
+
+});
