@@ -1205,7 +1205,7 @@ app.post("/updateRecipeTags", function (request, response) {
     var recipeId = request.body.recipeId;
     var tags = request.body.tags;
 
-    var query = "DELETE FROM tags WHERE recipeId = ?";
+    var query = "DELETE FROM recipe2tags WHERE recipeId = ?";
     var values = [ recipeId ];
 
     mysql.con.query(query, values, function(err,rows){
