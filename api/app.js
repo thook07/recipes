@@ -1266,9 +1266,9 @@ app.post("/createTag", function (request, response) {
         return;
     }
 
-    var id = request.body.amount;
-    var name = request.body.ingredient;
-    var category = request.body.recipeId;
+    var id = request.body.id;
+    var name = request.body.name;
+    var category = request.body.category;
 
     console.log(request.body);
 
