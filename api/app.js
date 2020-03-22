@@ -200,7 +200,7 @@ app.get("/ping", function(request, response) {
 });
 
 /**** Get All Recipe ****/
-app.use("/getRecipes", router)
+app.use("/getRecipes", router);
 app.post("/getRecipes", function (request, response){
     
     log.trace("Entering /getRecipe....");
@@ -433,6 +433,51 @@ function buildRecipes(recipeIds, onCompletion) {
 
 }
 
+app.use("/getTags", router);
+app.post("/getTags", function(request, response){
+    log.trace("Entering /getTags....");
+
+    var newResponse = {};
+      
+    var query = ""
+    query = `
+        select * from tags;
+    `
+    mysql.con.query(query, [], function(err,rows){
+        if(err) { 
+            log.error("/getTags Error Occurred getting data..");
+            newResponse["success"] = "false"
+            newResponse["msg"] = err
+            throw err;
+        }
+
+        log.trace("Found [" + rows.length + "] rows.")
+        if( rows.length <= 0) {
+            newResponse["success"] = "true"
+            newResponse["msg"] = "No Issues!"
+            response.send(newResponse)
+        } else {
+
+            var tags = [];
+            
+            for (var i = 0; i < rows.length; i++) {
+                var tag = {}
+                tag.id = rows[i].id;
+                tag.name = rows[i].name;
+                tag.category = rows[i].category;
+                tags.push(tag);
+            }
+
+            newResponse["tags"] = tags;
+            newResponse["success"] = "true"
+            log.debug("Successfully got tags!");
+            response.send(newResponse)
+        }
+    });
+
+
+});
+
 
 /**** Get Individual Recipe ****/
 app.use("/getRecipe", router)
@@ -541,6 +586,7 @@ app.post("/getRecipe", function (request, response){
     
 
 });
+
 
 /*** Probably should be deprecated. Need to use getRecipeGroup */
 app.use("/getGroceryList", router)
