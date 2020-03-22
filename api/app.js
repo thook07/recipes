@@ -1248,7 +1248,7 @@ app.post("/updateRecipeTags", function (request, response) {
             });
 
 
-            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was updated"});
+            response.status(200).send({ success: true, message: "Success. Tags been updated."});
         }
     });
 
