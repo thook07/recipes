@@ -1201,6 +1201,7 @@ app.post("/updateRecipeTags", function (request, response) {
         return;
     }
 
+    console.log(request);
     var newResponse = {};
     var id = request.body.recipeId;
     var tags = request.body.tags;
