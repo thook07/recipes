@@ -1202,8 +1202,7 @@ app.post("/updateRecipeTags", function (request, response) {
     }
 
     console.log(request);
-    var newResponse = {};
-    var id = request.body.recipeId;
+    var recipeId = request.body.recipeId;
     var tags = request.body.tags;
 
     var query = "DELETE FROM tags WHERE recipeId = ?";
