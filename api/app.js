@@ -1271,7 +1271,7 @@ app.post("/createTag", function (request, response) {
     var category = request.body.recipeId;
 
     var query = `
-    INSERT INTO tag
+    INSERT INTO tags
         (id, name, category) 
     VALUES
         (?,?,?)
