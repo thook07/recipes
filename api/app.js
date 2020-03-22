@@ -904,7 +904,6 @@ app.post("/createRecipe", function (request, response){
 
 });
 
-
 function updateRecipeIngredients(recipeId, ingredientId, recipeIngredients, onCompletion) {
 
     var values = []
@@ -1190,4 +1189,67 @@ app.post("/createRecipeIngredient", function (request, response) {
 
 });
 
+app.use("/updateRecipeTags", router);
+app.post("/updateRecipeTags", function (request, response) {
+    log.trace("Entering /updateRecipeTags....");
+    if( request.body == undefined ) {
+        log.error("/updateRecipeTags No Body Sent.");
+        response.send({
+            "success":"false",
+            "msg":"No body sent"
+        })
+        return;
+    }
 
+    var newResponse = {};
+    var id = request.body.recipeId;
+    var tags = request.body.tags;
+
+    var query = "DELETE FROM tags WHERE recipeId = ?";
+    var values = [ recipeId ];
+
+    mysql.con.query(query, values, function(err,rows){
+
+        if(err) { 
+            log.error("Error occurred while grabing order archive information.");
+            log.error("Error Msg: " + err);
+            throw err;
+        } else {
+            log.debug("Success. Deleted Tags first. Now going to update all tags");
+
+            var values = []
+            for(var i=0; i<tags.length; i++) {
+                values.push([
+                    recipeId,
+                    tags[i]
+                ])
+            }
+        
+            query = `
+                INSERT INTO recipe2tags (
+                    recipeId,
+                    tagId
+                ) VALUES ?
+            `
+
+            mysql.con.query(query, [values], function(err,rows){
+                if(err) { 
+                    log.error("Error occurred updating recipe tags");
+                    log.error("Error Msg: " + err);
+                    throw err;
+                } else {
+                    log.debug("Success. ["+ rows.affectedRows+"] tags were written to the datbase");
+                    var newResponse = {
+                        "success":true
+                    }
+                    onCompletion(newResponse);
+                }
+        
+            });
+
+
+            response.status(200).send({ success: true, message: "Success. Recipe Ingredient with id of ["+id+"] was updated"});
+        }
+    });
+
+});
